@@ -1,0 +1,22 @@
+export interface Video {
+    id: number;
+    user_id: number;
+    title: string;
+    description: string;
+    video_url: string;
+    likes: number;
+    created_at: string;
+    tags: Tag[];
+}
+
+export interface Tag {
+    id: number;
+    name: string;
+}
+
+export interface UploadVideoInput {
+    title: string;
+    description: string;
+    file: File;
+}
+
