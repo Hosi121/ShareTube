@@ -6,6 +6,8 @@ import (
     "backend/utils"
     "github.com/gin-gonic/gin"
     "golang.org/x/crypto/bcrypt"
+    "github.com/jinzhu/gorm"
+    "github.com/go-sql-driver/mysql"
 )
 
 // 登録関係を処理
@@ -30,14 +32,19 @@ func RegisterUser(c *gin.Context) {
     }
 
     if err := models.DB.Create(&user).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+        // MySQLエラーを検出
+        if mysqlErr, ok := err.(*mysql.MySQLError); ok && mysqlErr.Number == 1062 {
+            c.JSON(http.StatusBadRequest, gin.H{"error": "User already exists"})
+        } else {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+        }
         return
     }
 
     c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-//　ユーザーログインを処理
+// ユーザーログインを処理
 func LoginUser(c *gin.Context) {
     var input models.LoginInput
     if err := c.ShouldBindJSON(&input); err != nil {

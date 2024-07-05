@@ -6,14 +6,27 @@ import (
     "strings"
     "testing"
     "backend/models"
-    "backend/utils"
     "github.com/gin-gonic/gin"
     "github.com/stretchr/testify/assert"
     "golang.org/x/crypto/bcrypt"
 )
 
+func TestMain(m *testing.M) {
+    models.ConnectDatabase()
+    resetDatabase() // テスト前にデータベースをリセット
+    m.Run()
+}
+
+func resetDatabase() {
+    models.DB.Exec("DROP DATABASE IF EXISTS test_video_sns")
+    models.DB.Exec("CREATE DATABASE test_video_sns")
+    models.ConnectDatabase()
+}
+
 func TestRegisterUser(t *testing.T) {
     gin.SetMode(gin.TestMode)
+
+    resetDatabase() // データベースをリセット
 
     router := gin.Default()
     router.POST("/api/register", RegisterUser)
@@ -31,7 +44,7 @@ func TestRegisterUser(t *testing.T) {
     // 異常系のテスト: 重複ユーザー
     w = httptest.NewRecorder()
     router.ServeHTTP(w, req)
-    assert.Equal(t, http.StatusInternalServerError, w.Code)
+    assert.Equal(t, http.StatusBadRequest, w.Code)
 
     // 異常系のテスト: 不正なリクエスト
     invalidUser := `{"username": "", "email": "invalid-email", "password": "short"}`
@@ -46,7 +59,9 @@ func TestRegisterUser(t *testing.T) {
 func TestLoginUser(t *testing.T) {
     gin.SetMode(gin.TestMode)
 
-    // Setup a test user in the database
+    resetDatabase() // データベースをリセット
+
+    // テスト用ユーザーの作成
     hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password123"), bcrypt.DefaultCost)
     user := models.User{
         Username: "testuser",
@@ -89,6 +104,8 @@ func TestLoginUser(t *testing.T) {
 
 func TestLogoutUser(t *testing.T) {
     gin.SetMode(gin.TestMode)
+
+    resetDatabase() // データベースをリセット
 
     router := gin.Default()
     router.POST("/api/logout", LogoutUser)
