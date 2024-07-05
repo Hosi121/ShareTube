@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography, Container, Box } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Container,
+  Avatar,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { login } from "../../services/authServices";
 import { LoginInput } from "../../types/user";
+import { AuthContainer, FormBox, SubmitButton } from "./AuthStyles";
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState<LoginInput>({
@@ -14,10 +22,7 @@ const Login: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,18 +33,23 @@ const Login: React.FC = () => {
       await login(formData);
       navigate("/");
     } catch (err) {
-      setError("ログインに失敗しました。メールアドレスとパスワードを確認してください。");
+      setError(
+        "ログインに失敗しました。メールアドレスとパスワードを確認してください。"
+      );
     }
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Container component="main" maxWidth="xs">
+      <AuthContainer>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
         <Typography component="h1" variant="h5">
           ログイン
         </Typography>
         {error && <Typography color="error">{error}</Typography>}
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <FormBox component="form" onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -64,16 +74,24 @@ const Login: React.FC = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <Button
+          <SubmitButton
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            color="primary"
           >
             ログイン
+          </SubmitButton>
+          <Button
+            fullWidth
+            variant="text"
+            onClick={() => navigate("/register")}
+            sx={{ mt: 1 }}
+          >
+            アカウントをお持ちでない方はこちら
           </Button>
-        </Box>
-      </Box>
+        </FormBox>
+      </AuthContainer>
     </Container>
   );
 };
