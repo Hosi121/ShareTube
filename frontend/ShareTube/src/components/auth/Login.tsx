@@ -1,37 +1,42 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  TextField,
-  Button,
-  Typography,
-  Container,
-  Avatar,
-} from "@mui/material";
+import { Button, Typography, Container, Avatar } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { login } from "../../services/authServices";
 import { LoginInput } from "../../types/user";
-import { AuthContainer, FormBox, SubmitButton } from "./AuthStyles";
+import {
+  StyledTextField,
+  AuthContainer,
+  FormBox,
+  SubmitButton,
+} from "./AuthStyles";
 
 const Login: React.FC = () => {
+  // フォームデータの状態管理
   const [formData, setFormData] = useState<LoginInput>({
     email: "",
     password: "",
   });
+
+  // エラーメッセージの状態管理
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
+  // 入力フィールドの変更を処理する関数
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // フォーム送信を処理する関数
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
       await login(formData);
-      navigate("/");
+      navigate("/"); // ログイン成功時にホームページに遷移
     } catch (err) {
       setError(
         "ログインに失敗しました。メールアドレスとパスワードを確認してください。"
@@ -41,17 +46,21 @@ const Login: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <AuthContainer>
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
+      <AuthContainer elevation={6}>
+        <Avatar sx={{ m: 1, bgcolor: "primary.main", width: 56, height: 56 }}>
+          <LockOutlinedIcon fontSize="large" />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
           ログイン
         </Typography>
-        {error && <Typography color="error">{error}</Typography>}
+        {error && (
+          <Typography color="error" sx={{ mb: 2 }}>
+            {error}
+          </Typography>
+        )}
         <FormBox component="form" onSubmit={handleSubmit}>
-          <TextField
-            margin="normal"
+          {/* メールアドレス入力フィールド */}
+          <StyledTextField
             required
             fullWidth
             id="email"
@@ -61,9 +70,10 @@ const Login: React.FC = () => {
             autoFocus
             value={formData.email}
             onChange={handleChange}
+            variant="outlined"
           />
-          <TextField
-            margin="normal"
+          {/* パスワード入力フィールド */}
+          <StyledTextField
             required
             fullWidth
             name="password"
@@ -73,7 +83,9 @@ const Login: React.FC = () => {
             autoComplete="current-password"
             value={formData.password}
             onChange={handleChange}
+            variant="outlined"
           />
+          {/* ログインボタン */}
           <SubmitButton
             type="submit"
             fullWidth
@@ -82,11 +94,12 @@ const Login: React.FC = () => {
           >
             ログイン
           </SubmitButton>
+          {/* 登録ページへのリンク */}
           <Button
             fullWidth
             variant="text"
             onClick={() => navigate("/register")}
-            sx={{ mt: 1 }}
+            sx={{ mt: 2, textTransform: "none" }}
           >
             アカウントをお持ちでない方はこちら
           </Button>

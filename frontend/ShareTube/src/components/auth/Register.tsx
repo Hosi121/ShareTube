@@ -1,21 +1,33 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Typography, Container, Avatar } from "@mui/material";
+import { Typography, Container, Avatar } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { register } from "../../services/authServices";
 import { RegisterInput } from "../../types/user";
-import { AuthContainer, FormBox, SubmitButton } from "./AuthStyles";
+import {
+  StyledTextField,
+  AuthContainer,
+  FormBox,
+  SubmitButton,
+} from "./AuthStyles";
 
 const Register: React.FC = () => {
+  // フォームデータの状態管理
   const [formData, setFormData] = useState<RegisterInput>({
     username: "",
     email: "",
     password: "",
   });
+
+  // パスワード確認用の状態管理
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // エラーメッセージの状態管理
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
   const navigate = useNavigate();
 
+  // フォームバリデーション関数
   const validateForm = (): boolean => {
     const newErrors: { [key: string]: string } = {};
 
@@ -39,18 +51,20 @@ const Register: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // 入力フィールドの変更を処理する関数
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // フォーム送信を処理する関数
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (validateForm()) {
       try {
         await register(formData);
-        navigate("/login");
+        navigate("/login"); // 登録成功時にログインページに遷移
       } catch (err) {
         setErrors({ submit: "登録に失敗しました。もう一度お試しください。" });
       }
@@ -59,19 +73,19 @@ const Register: React.FC = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <AuthContainer>
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
+      <AuthContainer elevation={6}>
+        <Avatar sx={{ m: 1, bgcolor: "primary.main", width: 56, height: 56 }}>
+          <LockOutlinedIcon fontSize="large" />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h4" sx={{ mb: 3, fontWeight: 700 }}>
           ユーザー登録
         </Typography>
         {errors.submit && (
           <Typography color="error">{errors.submit}</Typography>
         )}
         <FormBox component="form" onSubmit={handleSubmit}>
-          <TextField
-            margin="normal"
+          {/* ユーザー名入力フィールド */}
+          <StyledTextField
             required
             fullWidth
             id="username"
@@ -81,9 +95,10 @@ const Register: React.FC = () => {
             autoFocus
             value={formData.username}
             onChange={handleChange}
+            variant="outlined"
           />
-          <TextField
-            margin="normal"
+          {/* メールアドレス入力フィールド */}
+          <StyledTextField
             required
             fullWidth
             id="email"
@@ -94,9 +109,10 @@ const Register: React.FC = () => {
             onChange={handleChange}
             error={!!errors.email}
             helperText={errors.email}
+            variant="outlined"
           />
-          <TextField
-            margin="normal"
+          {/* パスワード入力フィールド */}
+          <StyledTextField
             required
             fullWidth
             name="password"
@@ -108,9 +124,10 @@ const Register: React.FC = () => {
             onChange={handleChange}
             error={!!errors.password}
             helperText={errors.password}
+            variant="outlined"
           />
-          <TextField
-            margin="normal"
+          {/* パスワード確認入力フィールド */}
+          <StyledTextField
             required
             fullWidth
             name="confirmPassword"
@@ -121,7 +138,9 @@ const Register: React.FC = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
+            variant="outlined"
           />
+          {/* 登録ボタン */}
           <SubmitButton
             type="submit"
             fullWidth
