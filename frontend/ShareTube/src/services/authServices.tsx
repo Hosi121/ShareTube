@@ -1,18 +1,20 @@
 import api from "./api";
-import { AuthResponse, LoginInput, RegisterInput, User } from "../types/user";
+import { LoginInput, RegisterInput, User } from "../types/user";
 
-export const login = async (LoginInput: LoginInput): Promise<User> => {
-  const response = await api.post<AuthResponse>("/login", LoginInput);
-  localStorage.setItem("token", response.data.token);
-  return response.data.user;
+export const register = async (input: RegisterInput): Promise<User> => {
+  const response = await api.post<{ message: string }>("/register", input);
+  return response.data as unknown as User; // APIの実際のレスポンス形式に合わせて調整が必要かもしれません
 };
-export const register = async (registerInput: RegisterInput): Promise<User> => {
-  const response = await api.post<AuthResponse>(
-    "/register",
-    registerInput
+
+export const login = async (
+  input: LoginInput
+): Promise<{ token: string; message: string }> => {
+  const response = await api.post<{ token: string; message: string }>(
+    "/login",
+    input
   );
   localStorage.setItem("token", response.data.token);
-  return response.data.user;
+  return response.data;
 };
 
 export const logout = async (): Promise<void> => {
@@ -20,7 +22,11 @@ export const logout = async (): Promise<void> => {
   localStorage.removeItem("token");
 };
 
-export const getCurrentUser = async (): Promise<User> => {
-  const response = await api.get<User>("/users/me");
-  return response.data;
+export const getCurrentUser = async (): Promise<User | null> => {
+  try {
+    const response = await api.get<User>("/users/me"); // このエンドポイントは仮定です。実際のAPIに合わせて調整してください
+    return response.data;
+  } catch (error) {
+    return null;
+  }
 };

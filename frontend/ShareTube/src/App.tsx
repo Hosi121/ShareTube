@@ -1,17 +1,53 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import theme from "./theme";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import { getCurrentUser } from "./services/authServices";
+import { User } from "./types/user";
 
-function App() {
+const App: React.FC = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const user = await getCurrentUser();
+      setCurrentUser(user);
+      setLoading(false);
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<div>Home Page</div>} />
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/"
+            element={
+              currentUser ? <div>Home Page</div> : <Navigate to="/login" />
+            }
+          />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
-}
+};
 
 export default App;

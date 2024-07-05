@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "http://localhost:8080/api", // バックエンドのURLに合わせて変更してください
   headers: {
     "Content-Type": "application/json",
   },
@@ -16,17 +16,6 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
     return Promise.reject(error);
   }
 );
