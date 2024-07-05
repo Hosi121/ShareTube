@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography, Container, Box } from "@mui/material";
+import { TextField, Typography, Container, Avatar } from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { register } from "../../services/authServices";
 import { RegisterInput } from "../../types/user";
+import { AuthContainer, FormBox, SubmitButton } from "./AuthStyles";
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterInput>({
@@ -56,22 +58,18 @@ const Register: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
-        sx={{
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+    <Container component="main" maxWidth="xs">
+      <AuthContainer>
+        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <LockOutlinedIcon />
+        </Avatar>
         <Typography component="h1" variant="h5">
           ユーザー登録
         </Typography>
         {errors.submit && (
           <Typography color="error">{errors.submit}</Typography>
         )}
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <FormBox component="form" onSubmit={handleSubmit}>
           <TextField
             margin="normal"
             required
@@ -124,16 +122,16 @@ const Register: React.FC = () => {
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword}
           />
-          <Button
+          <SubmitButton
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            color="primary"
           >
             登録
-          </Button>
-        </Box>
-      </Box>
+          </SubmitButton>
+        </FormBox>
+      </AuthContainer>
     </Container>
   );
 };
