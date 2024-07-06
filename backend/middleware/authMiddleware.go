@@ -8,7 +8,6 @@ import (
     "backend/utils"
 )
 
-// AuthMiddleware returns a Gin middleware function for authenticating requests using JWT.
 func AuthMiddleware() gin.HandlerFunc {
     return func(c *gin.Context) {
         authHeader := c.GetHeader("Authorization")
@@ -26,7 +25,6 @@ func AuthMiddleware() gin.HandlerFunc {
             return
         }
 
-        // Set the user ID from the JWT claims into the Gin context
         c.Set("userID", claims.UserID)
         c.Next()
     }
