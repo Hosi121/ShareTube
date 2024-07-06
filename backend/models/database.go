@@ -22,6 +22,8 @@ func ConnectDatabase() {
         os.Getenv("DB_NAME"),
     )
 
+    log.Printf("Connecting to database with DSN: %s", dsn) // デバッグ用のログ出力
+
     DB, err = gorm.Open("mysql", dsn)
     if err != nil {
         log.Fatalf("Could not connect to the database: %v", err)

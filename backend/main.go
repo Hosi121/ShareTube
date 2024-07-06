@@ -3,6 +3,7 @@ package main
 import (
     "backend/models"
     "backend/routes"
+    "backend/middleware"
     "github.com/gin-gonic/gin"
     "github.com/joho/godotenv"
     "log"
@@ -18,8 +19,15 @@ func main() {
 
     r := gin.Default()
 
+    // CORS ミドルウェアを適用
+    r.Use(middleware.CORSMiddleware())
+
     models.ConnectDatabase()
 
+    // データベース接続を設定
+    models.SetDatabase(models.DB)
+
+    // ルートを設定
     routes.AuthRoutes(r)
 
     // ポートを指定してサーバーを起動
