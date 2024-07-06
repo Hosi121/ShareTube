@@ -28,7 +28,6 @@ type LoginInput struct {
     Password string `json:"password" binding:"required"`
 }
 
-// データベース接続を保持する変数
 var db *gorm.DB
 
 // データベース接続を設定する関数

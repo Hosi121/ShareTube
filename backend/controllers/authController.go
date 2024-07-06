@@ -5,24 +5,40 @@ import (
     "backend/models"
     "backend/utils"
     "github.com/gin-gonic/gin"
+    "github.com/jinzhu/gorm"
 )
 
 // User registration handler
 func Register(c *gin.Context) {
-    var user models.User
-    if err := c.ShouldBindJSON(&user); err != nil {
+    var input models.RegisterInput
+    if err := c.ShouldBindJSON(&input); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
         return
     }
 
-    hashedPassword, err := utils.HashPassword(user.Password)
+    // Check if the user already exists
+    if _, err := models.GetUserByEmail(input.Email); err == nil {
+        c.JSON(http.StatusConflict, gin.H{"error": "Email already registered"})
+        return
+    }
+
+    hashedPassword, err := utils.HashPassword(input.Password)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
         return
     }
-    user.Password = hashedPassword
+
+    user := models.User{
+        Username: input.Username,
+        Email:    input.Email,
+        Password: hashedPassword,
+    }
 
     if err := models.CreateUser(&user); err != nil {
+        if gorm.IsRecordNotFoundError(err) {
+            c.JSON(http.StatusConflict, gin.H{"error": "Username already exists"})
+            return
+        }
         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
         return
     }
@@ -32,10 +48,7 @@ func Register(c *gin.Context) {
 
 // User login handler
 func Login(c *gin.Context) {
-    var input struct {
-        Email    string `json:"email" binding:"required"`
-        Password string `json:"password" binding:"required"`
-    }
+    var input models.LoginInput
     if err := c.ShouldBindJSON(&input); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
         return
@@ -58,7 +71,7 @@ func Login(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, gin.H{"token": token})
+    c.JSON(http.StatusOK, gin.H{"token": token, "message": "Login successful"})
 }
 
 // User logout handler
