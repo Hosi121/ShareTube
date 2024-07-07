@@ -2,8 +2,6 @@ package models
 
 import (
     "time"
-
-    "github.com/jinzhu/gorm"
 )
 
 // Comment represents a comment on a video
@@ -21,17 +19,10 @@ type PostCommentInput struct {
     Comment string `json:"comment" binding:"required"`
 }
 
-var db *gorm.DB
-
-// SetDatabase sets the database connection
-func SetDatabase(database *gorm.DB) {
-    db = database
-}
-
 // GetCommentsByVideoID retrieves comments by video ID
 func GetCommentsByVideoID(videoID uint) ([]Comment, error) {
     var comments []Comment
-    if err := db.Where("video_id = ?", videoID).Find(&comments).Error; err != nil {
+    if err := DB.Where("video_id = ?", videoID).Find(&comments).Error; err != nil {
         return nil, err
     }
     return comments, nil
