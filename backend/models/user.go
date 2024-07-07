@@ -40,6 +40,14 @@ func CreateUser(user *User) error {
     return db.Create(user).Error
 }
 
+func GetUserByID(id uint) (*User, error) {
+    var user User
+    if err := db.First(&user, id).Error; err != nil {
+        return nil, err
+    }
+    return &user, nil
+}
+
 // メールアドレスでユーザーを取得する関数
 func GetUserByEmail(email string) (*User, error) {
     var user User
