@@ -21,6 +21,7 @@ import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import userData from "../testData/userData.json";
 
 const UserInfoCard = styled(Card)(({ theme }) => ({
   background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -61,34 +62,8 @@ const VideoAvatar = styled(Avatar)(({ theme }) => ({
   color: theme.palette.common.white,
 }));
 
-// ダミーデータ
-const user = {
-  name: "山田太郎",
-  email: "yamada@shizuoka.ac.jp",
-  avatarUrl: "https://example.com/avatar.jpg",
-  videos: [
-    {
-      id: 1,
-      title: "Me at the Shizuoka Univ",
-      views: 1200,
-      thumbnail: "https://example.com/thumbnail1.jpg",
-    },
-    {
-      id: 2,
-      title: "データとプログラミング",
-      views: 800,
-      thumbnail: "https://example.com/thumbnail2.jpg",
-    },
-    {
-      id: 3,
-      title: "テクノフェスタ",
-      views: 1500,
-      thumbnail: "https://example.com/thumbnail3.jpg",
-    },
-  ],
-};
-
-const UserPage: React.FC = () => {
+const Profile: React.FC = () => {
+  const user = userData;
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -105,7 +80,7 @@ const UserPage: React.FC = () => {
             <CardContent
               sx={{ display: "flex", alignItems: "center", padding: 4 }}
             >
-              <LargeAvatar alt={user.name} src={user.avatarUrl} >
+              <LargeAvatar alt={user.name} src={user.avatarUrl}>
                 {getInitials(user.name)}
               </LargeAvatar>
               <Box sx={{ flexGrow: 1 }}>
@@ -193,4 +168,4 @@ const UserPage: React.FC = () => {
   );
 };
 
-export default UserPage;
+export default Profile;

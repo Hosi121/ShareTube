@@ -1,0 +1,25 @@
+{
+    "name": "山田太郎",
+    "email": "yamada@shizuoka.ac.jp",
+    "avatarUrl": "https://example.com/avatar.jpg",
+    "videos": [
+      {
+        "id": 1,
+        "title": "Me at the Shizuoka Univ",
+        "views": 1200,
+        "thumbnail": "https://example.com/thumbnail1.jpg"
+      },
+      {
+        "id": 2,
+        "title": "データとプログラミング",
+        "views": 800,
+        "thumbnail": "https://example.com/thumbnail2.jpg"
+      },
+      {
+        "id": 3,
+        "title": "テクノフェスタ",
+        "views": 1500,
+        "thumbnail": "https://example.com/thumbnail3.jpg"
+      }
+    ]
+  }
