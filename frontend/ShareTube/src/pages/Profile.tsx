@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Grid,
@@ -15,13 +15,17 @@ import {
   IconButton,
   Card,
   CardContent,
+  Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Video } from "../types/video";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import userData from "../testData/userData.json";
+import useUserData from "../hooks/useUserData";
+import EditProfileModal from "./EditProfileModal";
+import SettingsModal from "./SettingsModal";
 
 const UserInfoCard = styled(Card)(({ theme }) => ({
   background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -63,7 +67,10 @@ const VideoAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const Profile: React.FC = () => {
-  const user = userData;
+  const { user, isLoading, error, updateUser } = useUserData();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -71,6 +78,10 @@ const Profile: React.FC = () => {
       .join("")
       .toUpperCase();
   };
+
+  if (isLoading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography>Error: {error}</Typography>;
+  if (!user) return <Typography>No user data available</Typography>;
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -80,8 +91,8 @@ const Profile: React.FC = () => {
             <CardContent
               sx={{ display: "flex", alignItems: "center", padding: 4 }}
             >
-              <LargeAvatar alt={user.name} src={user.avatarUrl}>
-                {getInitials(user.name)}
+              <LargeAvatar alt={user.username}>
+                {getInitials(user.username)}
               </LargeAvatar>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography
@@ -90,7 +101,7 @@ const Profile: React.FC = () => {
                   fontWeight="bold"
                   sx={{ mb: 2 }}
                 >
-                  {user.name}
+                  {user.username}
                 </Typography>
                 <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
                   {user.email}
@@ -99,6 +110,7 @@ const Profile: React.FC = () => {
                   <Button
                     variant="contained"
                     startIcon={<SettingsIcon />}
+                    onClick={() => setSettingsModalOpen(true)}
                     sx={{
                       backgroundColor: "rgba(255,255,255,0.2)",
                       "&:hover": { backgroundColor: "rgba(255,255,255,0.3)" },
@@ -111,6 +123,7 @@ const Profile: React.FC = () => {
                   <Button
                     variant="contained"
                     startIcon={<EditIcon />}
+                    onClick={() => setEditModalOpen(true)}
                     sx={{
                       backgroundColor: "rgba(255,255,255,0.2)",
                       "&:hover": { backgroundColor: "rgba(255,255,255,0.3)" },
@@ -132,26 +145,48 @@ const Profile: React.FC = () => {
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <List>
-              {user.videos.map((video) => (
-                <VideoItem key={video.id} disablePadding>
-                  <ListItemAvatar>
-                    <VideoAvatar variant="rounded">
-                      <VideoLibraryIcon />
-                    </VideoAvatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1" fontWeight="medium">
-                        {video.title}
-                      </Typography>
-                    }
-                    secondary={`${video.views.toLocaleString()} 回視聴`}
-                  />
-                  <IconButton edge="end" aria-label="play">
-                    <PlayArrowIcon />
-                  </IconButton>
-                </VideoItem>
-              ))}
+              {user.videos &&
+                user.videos.map((video: Video) => (
+                  <VideoItem key={video.id} disablePadding>
+                    <ListItemAvatar>
+                      <VideoAvatar variant="rounded">
+                        <VideoLibraryIcon />
+                      </VideoAvatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1" fontWeight="medium">
+                          {video.title}
+                        </Typography>
+                      }
+                      secondary={
+                        <>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            color="text.primary"
+                          >
+                            {video.likes} likes •{" "}
+                            {new Date(video.created_at).toLocaleDateString()}
+                          </Typography>
+                          <Box sx={{ mt: 1 }}>
+                            {video.tags.map((tag) => (
+                              <Chip
+                                key={tag.id}
+                                label={tag.name}
+                                size="small"
+                                sx={{ mr: 0.5, mb: 0.5 }}
+                              />
+                            ))}
+                          </Box>
+                        </>
+                      }
+                    />
+                    <IconButton edge="end" aria-label="play">
+                      <PlayArrowIcon />
+                    </IconButton>
+                  </VideoItem>
+                ))}
             </List>
             <Button
               variant="contained"
@@ -164,6 +199,18 @@ const Profile: React.FC = () => {
           </ContentPaper>
         </Grid>
       </Grid>
+      <EditProfileModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        user={user}
+        onSave={updateUser}
+      />
+      <SettingsModal
+        open={settingsModalOpen}
+        onClose={() => setSettingsModalOpen(false)}
+        user={user}
+        onSave={updateUser}
+      />
     </Container>
   );
 };
