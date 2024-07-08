@@ -64,7 +64,7 @@ const Register: React.FC = () => {
     if (validateForm()) {
       try {
         await register(formData);
-        navigate("/plofile"); // 登録成功時にログインページに遷移
+        navigate("/login"); // 登録成功時にログインページに遷移
       } catch (err) {
         setErrors({ submit: "登録に失敗しました。もう一度お試しください。" });
       }
