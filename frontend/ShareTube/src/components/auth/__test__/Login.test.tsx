@@ -1,7 +1,7 @@
 import { act } from 'react-dom/test-utils';
 import { createRoot } from 'react-dom/client';
 import Login from '../Login';
-import { login } from '../../../services/authServices';
+import { login } from '../../../services/authService';
 
 // authServiceのモック
 jest.mock('../../../services/authService', () => ({

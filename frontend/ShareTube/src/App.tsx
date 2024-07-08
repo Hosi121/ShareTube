@@ -10,7 +10,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import { getCurrentUser } from "./services/authServices";
+import Profile from "./pages/Profile";
+import { getCurrentUser } from "./services/authService";
 import { User } from "./types/user";
 
 const App: React.FC = () => {
@@ -44,6 +45,7 @@ const App: React.FC = () => {
               currentUser ? <div>Home Page</div> : <Navigate to="/login" />
             }
           />
+          <Route path="/user" element={<Profile />} />
         </Routes>
       </Router>
     </ThemeProvider>

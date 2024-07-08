@@ -1,7 +1,7 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../services/authServices";
+import { logout } from "../services/authService";
 import { User } from "../types/user";
 
 interface NavbarProps {

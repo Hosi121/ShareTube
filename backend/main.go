@@ -29,6 +29,8 @@ func main() {
 
     // ルートを設定
     routes.AuthRoutes(r)
+    routes.ProfileRoutes(r) 
+    routes.CommentRoutes(r)
 
     // ポートを指定してサーバーを起動
     port := os.Getenv("PORT")
