@@ -57,9 +57,16 @@ func UploadVideo(c *gin.Context) {
         return
     }
 
+    // コンテキストからユーザーIDを取得
+    userID, exists := c.Get("userID")
+    if !exists {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "User ID not found"})
+        return
+    }
+
     // データベースに動画情報を保存
     video := models.Video{
-        UserID:      1, // 実際のユーザーIDに置き換える
+        UserID:      userID.(uint),
         Title:       input.Title,
         Description: input.Description,
         VideoURL:    filePath,
