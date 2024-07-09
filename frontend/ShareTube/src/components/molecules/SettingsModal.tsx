@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { DialogTitle, DialogContent, DialogActions, IconButton, List, ListItem, ListItemText, Switch, Divider } from '@mui/material';
 import Dialog from '../atoms/Dialog';
 import Button from '../atoms/Button';
-import { User } from '../types/user';
+import { User } from '../../types/user';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -19,7 +19,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ open, onClose, user, onSa
   const [darkMode, setDarkMode] = useState(false);
 
   const handleSave = () => {
-    // ここで設定を保存する処理を実装
+    // 必要なプロパティのみを更新するように修正
     onSave({ notifications, darkMode });
     onClose();
   };
