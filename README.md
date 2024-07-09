@@ -1,8 +1,14 @@
-# ShareTube
+<div align="center">
+  <img height="-10" width="120" src="https://static.vecteezy.com/system/resources/previews/004/852/965/original/video-play-film-player-movie-line-icon-illustration-logo-template-suitable-for-many-purposes-free-vector.jpg"  alt="GitHub Profile Trophy"/>
+  <h1 align="center">ShareTube</h1>
+  <p align="center">学内での動画共有サービス！同大学内のローカルコミュニティ内で，動画共有を楽しもう！</p>
+</div>
 
-**使用する技術**
+<div align="center">
+  <h2 align="center">使用技術</h2>
+  <img height="70" width="200%" src="https://skillicons.dev/icons?i=go,typescript,react,vite,mysql,docker">
+</div>
 
-[![My Skills](https://skillicons.dev/icons?i=go,typescript,react,vite,mysql,docker)](https://skillicons.dev)
 
 ## Frontend
 
