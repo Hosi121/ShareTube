@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Typography, Divider, Box, Button } from '@mui/material';
 import VideoItem from '../molecules/VideoItem';
-import { Video } from '../types/video';
+import { Video } from '../../types/video';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 
 interface VideoListProps {

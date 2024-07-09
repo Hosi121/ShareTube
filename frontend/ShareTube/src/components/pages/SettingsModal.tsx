@@ -13,7 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { User } from "../types/user";
+import { User } from "../../types/user";
 import CloseIcon from "@mui/icons-material/Close";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
