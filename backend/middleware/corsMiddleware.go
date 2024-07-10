@@ -8,7 +8,7 @@ import (
 
 func CORSMiddleware() gin.HandlerFunc {
     return cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:5175", "http://127.0.0.1:5175"}, // フロントエンドのURLを指定
+        AllowOrigins:     []string{"http://localhost:5174", "http://127.0.0.1:5174"}, // フロントエンドのURLを指定
         AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
         AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
         ExposeHeaders:    []string{"Content-Length"},
