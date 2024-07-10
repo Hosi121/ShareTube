@@ -1,6 +1,6 @@
-import React from 'react';
-import { IconButton, IconButtonProps } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import React from "react";
+import { IconButton, IconButtonProps } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 interface SearchButtonProps extends IconButtonProps {}
 
