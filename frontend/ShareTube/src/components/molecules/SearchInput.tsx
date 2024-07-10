@@ -1,8 +1,7 @@
-// molecules/SearchInput.tsx
 import React from 'react';
-import { TextField, InputAdornment } from '@mui/material';
+import { TextField, InputAdornment, TextFieldProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
+import  SearchIcon  from '@mui/icons-material/Search';
 
 const StyledTextField = styled(TextField)({
   '& .MuiOutlinedInput-root': {
@@ -12,17 +11,18 @@ const StyledTextField = styled(TextField)({
   },
 });
 
-interface SearchInputProps {
+interface SearchInputProps extends Omit<TextFieldProps, 'variant'> {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => (
+export const SearchInput: React.FC<SearchInputProps> = ({ value, onChange, size, ...props }) => (
   <StyledTextField
     fullWidth
     placeholder="動画を検索..."
     value={value}
     onChange={onChange}
+    size={size}
     InputProps={{
       startAdornment: (
         <InputAdornment position="start">
@@ -30,5 +30,6 @@ export const SearchInput: React.FC<SearchInputProps> = ({ value, onChange }) => 
         </InputAdornment>
       ),
     }}
+    {...props}
   />
 );
