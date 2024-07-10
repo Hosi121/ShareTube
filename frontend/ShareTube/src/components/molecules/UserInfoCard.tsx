@@ -4,7 +4,6 @@ import LargeAvatar from "../atoms/LargeAvatar";
 import Button from "../atoms/Button";
 import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
-import { Gradient } from "@mui/icons-material";
 
 interface UserInfoCardProps {
   user: {
