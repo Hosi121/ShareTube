@@ -1,64 +1,55 @@
-// src/theme.ts
+import { createTheme } from "@mui/material/styles";
 
-import { createTheme } from '@mui/material/styles';
+// カスタムカラーパレットの定義
+const customColors = {
+  primary: {
+    main: "#3f51b5", // インディゴ色（青みがかった色）
+    light: "#757de8",
+    dark: "#002984",
+    contrastText: "#ffffff",
+  },
+  secondary: {
+    main: "#f50057",
+    light: "#ff4081",
+    dark: "#c51162",
+    contrastText: "#ffffff",
+  },
+};
 
+// テーマの作成
 const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#1976d2', // プライマリカラー
-            light: '#42a5f5',
-            dark: '#1565c0',
-        },
-        secondary: {
-            main: '#dc004e', // セカンダリカラー
-            light: '#ff4081',
-            dark: '#9a0036',
-        },
-        background: {
-            default: '#f5f5f5',
-        },
+  palette: {
+    primary: customColors.primary,
+    secondary: customColors.secondary,
+    background: {
+      default: "#f5f5f5", // 薄いグレー
+      paper: "#ffffff",
     },
-    typography: {
-        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-        h1: {
-            fontSize: '2.5rem',
-            fontWeight: 500,
-        },
-        h2: {
-            fontSize: '2rem',
-            fontWeight: 500,
-        },
-        h3: {
-            fontSize: '1.75rem',
-            fontWeight: 500,
-        },
-        body1: {
-            fontSize: '1rem',
-        },
-        button: {
-            textTransform: 'none', // ボタンテキストを大文字に変換しない
-        },
+    text: {
+      primary: "rgba(0, 0, 0, 0.87)",
+      secondary: "rgba(0, 0, 0, 0.54)",
     },
-    shape: {
-        borderRadius: 8,
-    },
-    spacing: 8, // ベーススペーシング（単位: px）
-    components: {
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    padding: '8px 16px',
-                },
-            },
+  },
+  typography: {
+    fontFamily: [
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+    ].join(","),
+  },
+  shape: {
+    borderRadius: 8,
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
         },
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    marginBottom: '16px',
-                },
-            },
-        },
+      },
     },
+  },
 });
 
 export default theme;
