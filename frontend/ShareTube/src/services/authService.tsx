@@ -1,4 +1,5 @@
 import api from "./api";
+import axios from "axios";
 import { LoginInput, RegisterInput, User } from "../types/user";
 
 export const register = async (input: RegisterInput): Promise<User> => {

@@ -1,23 +1,13 @@
 import axios from "axios";
+import {VideoComment, PostCommentInput} from "../types/comment";
 
 const API_URL = "http://your-api-url/api";
 
-export interface Comment {
-  id: number;
-  user_id: number;
-  video_id: number;
-  content: string;
-  created_at: string;
-}
 
-export interface CreateCommentInput {
-  video_id: number;
-  content: string;
-}
 
-export const fetchComments = async (videoId: number): Promise<Comment[]> => {
+export const fetchComments = async (videoId: number): Promise<VideoComment[]> => {
   try {
-    const response = await axios.get<Comment[]>(
+    const response = await axios.get<VideoComment[]>(
       `${API_URL}/videos/${videoId}/comments`
     );
     return response.data;
@@ -28,10 +18,10 @@ export const fetchComments = async (videoId: number): Promise<Comment[]> => {
 };
 
 export const createComment = async (
-  commentData: CreateCommentInput
-): Promise<Comment> => {
+  commentData: PostCommentInput
+): Promise<VideoComment> => {
   try {
-    const response = await axios.post<Comment>(
+    const response = await axios.post<VideoComment>(
       `${API_URL}/comments`,
       commentData
     );

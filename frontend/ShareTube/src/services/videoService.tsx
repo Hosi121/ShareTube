@@ -1,23 +1,9 @@
 import axios from "axios";
-import { Video, UploadVideoInput } from "../types/video";
+import { Video, UploadVideoInput , VideoDetails} from "../types/video";
 
 const API_URL = "http://localhost:8080";
 
-export interface Comment {
-  id: number;
-  user_id: number;
-  video_id: number;
-  content: string;
-  created_at: string;
-}
-
-export interface VideoDetails extends Video {
-  comments: Comment[];
-}
-
-export const fetchVideoDetails = async (
-  videoId: string
-): Promise<VideoDetails> => {
+export const fetchVideoDetails = async (videoId: string): Promise<VideoDetails> => {
   try {
     const response = await axios.get<VideoDetails>(
       `${API_URL}/videos/${videoId}`
