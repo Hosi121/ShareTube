@@ -20,3 +20,10 @@ export interface UploadVideoInput {
     file: File;
 }
 
+export interface Comment {
+    id: number;
+    user_id: number;
+    video_id: number;
+    content: string;
+    created_at: string;
+}
