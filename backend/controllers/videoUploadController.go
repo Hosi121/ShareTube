@@ -12,7 +12,7 @@ import (
 // UploadVideo handles the video upload process
 func UploadVideo(c *gin.Context) {
     var input models.UploadVideoInput
-    if err := c.ShouldBindJSON(&input); err != nil {
+    if err := c.ShouldBind(&input); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
@@ -45,8 +45,12 @@ func UploadVideo(c *gin.Context) {
         return
     }
 
-    // 一時保存ディレクトリにファイルを保存
-    saveDir := "./uploads"
+    // 保存ディレクトリの設定（環境変数または設定ファイルから取得）
+    saveDir := os.Getenv("UPLOAD_DIR")
+    if saveDir == "" {
+        saveDir = "./uploads"
+    }
+
     if _, err := os.Stat(saveDir); os.IsNotExist(err) {
         os.Mkdir(saveDir, os.ModePerm)
     }
