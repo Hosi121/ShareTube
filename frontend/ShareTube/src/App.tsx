@@ -14,6 +14,7 @@ import Profile from "./components/pages/Profile";
 import Home from "./components/pages/Home";
 import { getCurrentUser } from "./services/authService";
 import { User } from "./types/user";
+import Upload from "./components/pages/Upload";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -42,6 +43,7 @@ const App: React.FC = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/user" element={<Profile />} />
+          <Route path="/upload" element={<Upload/>}/>
           <Route
             path="/"
             element={
