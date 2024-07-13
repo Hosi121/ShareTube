@@ -18,23 +18,35 @@ import { User } from "./types/user";
 import Upload from "./components/pages/Upload";
 import VideoPlay from "./components/pages/VideoPlay";
 import { MainLayout } from "./components/layout/MainLayout";
+import LoadingScreen from "./components/organisms/LoadingScreen";
+import SplashScreen from "./components/organisms/SplashScreen";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       const user = await getCurrentUser();
       setCurrentUser(user);
       setLoading(false);
+      setShowSplash(false);
     };
 
     fetchCurrentUser();
   }, []);
 
+  const handleLoadingComplete = () => {
+    setLoading(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onLoadingComplete={handleLoadingComplete} />;
+  }
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (
@@ -56,12 +68,7 @@ const App: React.FC = () => {
             <Route path="/user" element={<Profile />} />
             <Route path="/play/:videoId" element={<VideoPlay />} />
           </Route>
-          <Route
-            path="/"
-            element={
-              currentUser ? <div>Home Page</div> : <Navigate to="/Home" />
-            }
-          />
+          <Route path="/" element={<Navigate to="/home" />} />
         </Routes>
       </Router>
     </ThemeProvider>
