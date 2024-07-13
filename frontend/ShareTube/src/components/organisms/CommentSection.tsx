@@ -5,7 +5,7 @@ import { User } from '../../types/user';
 
 interface CommentSectionProps {
   comments: VideoComment[];
-  currentUser: User | null;  // ここを User | null に変更
+  currentUser: User | null;
   onAddComment: (comment: string) => void;
 }
 

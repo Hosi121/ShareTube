@@ -12,7 +12,7 @@ const VideoDetails: React.FC<VideoDetailsProps> = ({ video }) => (
     <Typography variant="h4">{video.title}</Typography>
     <Typography variant="body1">{video.description}</Typography>
     <Typography variant="caption">Likes: {video.likes}</Typography>
-    <Typography variant="caption">Created at: {video.created_at}</Typography>
+    <Typography variant="caption">Created at: {video.created_at.toString()}</Typography>
   </Box>
 );
 
