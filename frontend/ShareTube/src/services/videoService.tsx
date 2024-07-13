@@ -1,12 +1,10 @@
-import axios from "axios";
+import api from "./api";
 import { Video, UploadVideoInput , VideoDetails} from "../types/video";
-
-const API_URL = "http://localhost:8080";
 
 export const fetchVideoDetails = async (videoId: string): Promise<VideoDetails> => {
   try {
-    const response = await axios.get<VideoDetails>(
-      `${API_URL}/videos/${videoId}`
+    const response = await api.get<VideoDetails>(
+      `/videos/${videoId}`
     );
     return response.data;
   } catch (error) {
@@ -17,8 +15,8 @@ export const fetchVideoDetails = async (videoId: string): Promise<VideoDetails> 
 
 export const likeVideo = async (videoId: string): Promise<number> => {
   try {
-    const response = await axios.post<{ likes: number }>(
-      `${API_URL}/videos/${videoId}/like`
+    const response = await api.post<{ likes: number }>(
+      `/videos/${videoId}/like`
     );
     return response.data.likes;
   } catch (error) {
@@ -32,7 +30,7 @@ export const fetchVideos = async (params?: {
   tags?: string[];
 }): Promise<Video[]> => {
   try {
-    const response = await axios.get<Video[]>(`${API_URL}/videos`, { params });
+    const response = await api.get<Video[]>(`/videos`, { params });
     return response.data;
   } catch (error) {
     console.error("Error fetching videos:", error);
@@ -49,7 +47,7 @@ export const uploadVideo = async (
     formData.append("description", videoData.description);
     formData.append("file", videoData.file);
 
-    const response = await axios.post<Video>(`${API_URL}/videos`, formData, {
+    const response = await api.post<Video>(`/videos`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -66,8 +64,8 @@ export const updateVideo = async (
   updateData: Partial<Video>
 ): Promise<Video> => {
   try {
-    const response = await axios.put<Video>(
-      `${API_URL}/videos/${videoId}`,
+    const response = await api.put<Video>(
+      `/videos/${videoId}`,
       updateData
     );
     return response.data;
@@ -79,7 +77,7 @@ export const updateVideo = async (
 
 export const deleteVideo = async (videoId: number): Promise<void> => {
   try {
-    await axios.delete(`${API_URL}/videos/${videoId}`);
+    await api.delete(`/videos/${videoId}`);
   } catch (error) {
     console.error("Error deleting video:", error);
     throw error;
