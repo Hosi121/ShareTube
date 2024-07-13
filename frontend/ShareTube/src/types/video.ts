@@ -1,5 +1,4 @@
 import { VideoComment } from './comment';
-import { User } from './user';
 
 export interface Video {
     id: number;
@@ -8,7 +7,7 @@ export interface Video {
     description: string;
     video_url: string;
     likes: number;
-    created_at: string;
+    created_at: Date;
     tags: Tag[];
 }
 

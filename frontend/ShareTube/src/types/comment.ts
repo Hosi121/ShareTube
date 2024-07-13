@@ -5,7 +5,7 @@ export interface VideoComment {
     video_id: number;
     user_id: number;
     comment: string;
-    timestamp: string;
+    timestamp: Date;
     user: User
 }
 
