@@ -20,6 +20,7 @@ import VideoPlay from "./components/pages/VideoPlay";
 import { MainLayout } from "./components/layout/MainLayout";
 import LoadingScreen from "./components/organisms/LoadingScreen";
 import SplashScreen from "./components/organisms/SplashScreen";
+import SearchResults from "./components/pages/SearchResult";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -67,6 +68,7 @@ const App: React.FC = () => {
           >
             <Route path="/user" element={<Profile />} />
             <Route path="/play/:videoId" element={<VideoPlay />} />
+            <Route path="/search" element={<SearchResults />}/>
           </Route>
           <Route path="/" element={<Navigate to="/home" />} />
         </Routes>
