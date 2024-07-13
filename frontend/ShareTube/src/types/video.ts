@@ -1,3 +1,5 @@
+import { VideoComment } from './comment';
+
 export interface Video {
     id: number;
     user_id: number;
@@ -5,7 +7,7 @@ export interface Video {
     description: string;
     video_url: string;
     likes: number;
-    created_at: string;
+    created_at: Date;
     tags: Tag[];
 }
 
@@ -20,3 +22,7 @@ export interface UploadVideoInput {
     file: File;
 }
 
+export interface VideoDetails {
+    video: Video;
+    comments: VideoComment[];
+}

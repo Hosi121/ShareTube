@@ -1,7 +1,7 @@
 import api from "./api";
 import { User } from "../types/user";
 
-export const getUserProfile = async (userId: string): Promise<User> => {
+export const getUserProfile = async (userId: string): Promise<User | null> => {
     try {
       const response = await api.get<User>(`/users/${userId}`);
       return response.data;
@@ -17,6 +17,16 @@ export const getUserProfile = async (userId: string): Promise<User> => {
       return response.data;
     } catch (error) {
       console.error("Failed to update user profile:", error);
+      throw error;
+    }
+  };
+
+  export const fetchUserById = async (userId: string): Promise<User> => {
+    try {
+      const response = await api.get<User>(`/users/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch user:", error);
       throw error;
     }
   };

@@ -2,7 +2,8 @@ export interface User {
     id: number;
     username: string;
     email: string;
-    created_at: string;
+    created_at: Date;
+    avatar_url: string;
 }
 
 export interface RegisterInput {
