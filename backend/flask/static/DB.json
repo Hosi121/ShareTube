@@ -1,0 +1,25 @@
+{
+  "videos": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "title": "Sample Video",
+      "description": "This is a sample video.",
+      "video_url": "http://example.com/video1",
+      "likes": 10,
+      "created_at": "2024-07-13T00:00:00Z",
+      "tags": ["sample", "test"]
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "title": "Another Video",
+      "description": "This is another sample video.",
+      "video_url": "http://example.com/video2",
+      "likes": 5,
+      "created_at": "2024-07-14T00:00:00Z",
+      "tags": ["example", "video"]
+    }
+  ]
+}
+

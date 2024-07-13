@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Container, Grid, Typography } from '@mui/material';
-import useUserData from '../../hooks/useUserData';
-import UserInfoCard from '../molecules/UserInfoCard';
-import VideoList from '../organisms/VideoList';
-import EditProfileModal from '../molecules/EditProfileModal';
-import SettingsModal from '../molecules/SettingsModal';
+import React, { useState } from "react";
+import { Container, Grid, Typography } from "@mui/material";
+import useUserData from "../../hooks/useUserData";
+import UserInfoCard from "../molecules/UserInfoCard";
+import VideoList from "../organisms/VideoList";
+import EditProfileModal from "../molecules/EditProfileModal";
+import SettingsModal from "../molecules/SettingsModal";
 
 const Profile: React.FC = () => {
   const { user, isLoading, error, updateUser } = useUserData();
@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <VideoList videos={user.videos} />
+          <VideoList videos={user.videos ?? []} />
         </Grid>
       </Grid>
       <EditProfileModal
