@@ -1,17 +1,12 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import ClassList from "../molecules/ClassList";
-
-interface Class {
-  id: number;
-  name: string;
-  teacher: string;
-}
+import { Class } from "../../types/class";
 
 const EduHomeLayout: React.FC = () => {
   const classes: Class[] = [
-      { id: 1, name: "データとプログラミング", teacher: "杉山先生" },
-      { id: 2, name: "情報社会思想", teacher: "吉田先生" },
+    { id: 1, name: "データとプログラミング", teacher: "杉山先生" },
+    { id: 2, name: "情報社会思想", teacher: "吉田先生" },
   ];
 
   const handleClassSelect = (classId: string) => {
