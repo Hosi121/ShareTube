@@ -46,13 +46,15 @@ interface FileUploadProps {
 const FileUpload: React.FC<FileUploadProps> = ({
   allowedExtensions,
   fileName,
-  error,
   onFileChange,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadComplete, setUploadComplete] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const SIMULATE_UPLOAD_TIME = 6000; // 6秒後にアップロード完了となるように仮定
 
   useEffect(() => {
     if (fileName) {
@@ -60,7 +62,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       const timer = setTimeout(() => {
         setIsUploading(false);
         setUploadComplete(true);
-      }, 1500); // Simulate upload time
+      }, SIMULATE_UPLOAD_TIME);
       return () => clearTimeout(timer);
     }
   }, [fileName]);
@@ -98,7 +100,11 @@ const FileUpload: React.FC<FileUploadProps> = ({
       onFileChange(file);
       setUploadComplete(false);
     } else {
-      // エラー処理
+      onFileChange(null as unknown as File);
+      setUploadComplete(false);
+      setUploadComplete(false);
+      setUploadComplete(false);
+      setError("サポートされていないファイル形式です");
     }
   };
 
