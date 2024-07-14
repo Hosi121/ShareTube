@@ -27,3 +27,10 @@ func GetCommentsByVideoID(videoID uint) ([]Comment, error) {
     }
     return comments, nil
 }
+
+func SaveComment(comment *Comment) error {
+    if err := DB.Create(comment).Error; err != nil {
+        return err
+    }
+    return nil
+}
