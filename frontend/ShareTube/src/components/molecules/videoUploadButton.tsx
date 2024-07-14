@@ -1,9 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
-const videoUploadButton = () => {
+const VideoUploadButton = () => {
   const navigate = useNavigate();
 
   const handleUploadClick = () => {
@@ -23,4 +23,4 @@ const videoUploadButton = () => {
   );
 };
 
-export default videoUploadButton;
+export default VideoUploadButton;
