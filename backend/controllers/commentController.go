@@ -2,7 +2,7 @@ package controllers
 
 import (
     "net/http"
-    "time"
+    "strconv"
 
     "github.com/gin-gonic/gin"
     "backend/models"
@@ -44,4 +44,20 @@ func PostComment(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, comment)
+}
+
+func LikeComment(c *gin.Context) {
+    commentID, err := strconv.ParseUint(c.Param("comment_id"), 10, 32)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid comment ID"})
+        return
+    }
+
+    likes, err := models.LikeComment(uint(commentID))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"likes": likes})
 }
