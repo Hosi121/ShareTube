@@ -35,3 +35,15 @@ func SaveComment(comment *Comment) error {
     }
     return nil
 }
+
+func LikeComment(commentID uint) (int, error) {
+    var comment Comment
+    if err := DB.First(&comment, commentID).Error; err != nil {
+        return 0, err
+    }
+    comment.Likes++
+    if err := DB.Save(&comment).Error; err != nil {
+        return 0, err
+    }
+    return comment.Likes, nil
+}
