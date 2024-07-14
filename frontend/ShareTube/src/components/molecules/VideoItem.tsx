@@ -34,7 +34,7 @@ const VideoItem: React.FC<VideoItemProps> = ({ video }) => {
         secondary={
           <>
             <Typography component="span" variant="body2" color="text.primary">
-              {video.likes} likes •{" "}
+              ♡{video.likes}•{" "}
               {new Date(video.created_at).toLocaleDateString()}
             </Typography>
             <Box sx={{ mt: 1 }}>
