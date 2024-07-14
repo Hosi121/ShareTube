@@ -25,38 +25,42 @@ const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
   const [error, setError] = useState<string>("");
 
   const allowedExtensions = [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv"];
+  const MAX_TITLE_LENGTH = 50;
+  const MAX_DESCRIPTION_LENGTH = 200;
+  const MAX_TAG_LENGTH = 10;
+  const MAX_TAGS = 5;
 
   const handleVideoInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setVideoInput((prev) => ({ ...prev, [name]: value }));
+    if (name === "title" && value.length <= MAX_TITLE_LENGTH) {
+      setVideoInput((prev) => ({ ...prev, title: value }));
+    } else if (
+      name === "description" &&
+      value.length <= MAX_DESCRIPTION_LENGTH
+    ) {
+      setVideoInput((prev) => ({ ...prev, description: value }));
+    }
   };
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const extension = file.name
-        .substring(file.name.lastIndexOf("."))
-        .toLowerCase();
-
-      if (allowedExtensions.includes(extension)) {
-        setVideoInput((prev) => ({ ...prev, file }));
-        setFileName(file.name);
-        setError("");
-      } else {
-        setError(
-          "サポートされていないファイル形式です。動画ファイルを選択してください。"
-        );
-        e.target.value = "";
-      }
+  const handleFileChange = (file: File) => {
+    if (file) {
+      setVideoInput((prev) => ({ ...prev, file }));
+      setFileName(file.name);
+      setError("");
+    } else {
+      setVideoInput((prev) => ({ ...prev, file: null as unknown as File }));
+      setFileName("");
     }
   };
 
   const handleTagInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCurrentTag(e.target.value);
+    if (e.target.value.length <= MAX_TAG_LENGTH) {
+      setCurrentTag(e.target.value);
+    }
   };
 
   const handleAddTag = () => {
-    if (currentTag && !tags.includes(currentTag)) {
+    if (currentTag && !tags.includes(currentTag) && tags.length < MAX_TAGS) {
       setTags([...tags, currentTag]);
       setCurrentTag("");
     }
@@ -79,8 +83,31 @@ const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
     }
   };
 
+  const CharacterCount = ({
+    current,
+    max,
+  }: {
+    current: number;
+    max: number;
+  }) => (
+    <Typography
+      variant="caption"
+      color="textSecondary"
+      align="right"
+      style={{ width: "100%", display: "block" }}
+    >
+      {current}/{max}
+    </Typography>
+  );
+
   return (
     <form onSubmit={handleSubmit}>
+      <FileUpload
+        allowedExtensions={allowedExtensions}
+        fileName={fileName}
+        error={error}
+        onFileChange={handleFileChange}
+      />
       <CustomTextField
         label="タイトル"
         name="title"
@@ -91,6 +118,17 @@ const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
         variant="outlined"
         fullWidth
       />
+      <CharacterCount
+        current={videoInput.title.length}
+        max={MAX_TITLE_LENGTH}
+      />
+      <LinearProgress
+        variant="determinate"
+        value={(videoInput.title.length / MAX_TITLE_LENGTH) * 100}
+      />
+      <Typography variant="caption" color="textSecondary">
+        タイトルは最大{MAX_TITLE_LENGTH}文字まで記入できます。
+      </Typography>
       <CustomTextField
         label="説明"
         name="description"
@@ -102,18 +140,29 @@ const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
         variant="outlined"
         fullWidth
       />
-      <FileUpload
-        allowedExtensions={allowedExtensions}
-        fileName={fileName}
-        error={error}
-        onFileChange={handleFileChange}
+      <CharacterCount
+        current={videoInput.description.length}
+        max={MAX_DESCRIPTION_LENGTH}
       />
+      <LinearProgress
+        variant="determinate"
+        value={(videoInput.description.length / MAX_DESCRIPTION_LENGTH) * 100}
+      />
+      <Typography variant="caption" color="textSecondary">
+        説明文は最大{MAX_DESCRIPTION_LENGTH}文字まで記入できます。
+      </Typography>
       <TagInput
         currentTag={currentTag}
         onTagInputChange={handleTagInputChange}
         onAddTag={handleAddTag}
       />
+      <Typography variant="caption" color="textSecondary">
+        タグは最大{MAX_TAG_LENGTH}文字まで記入できます。
+      </Typography>
       <TagList tags={tags} onRemoveTag={handleRemoveTag} />
+      <Typography variant="caption" color="textSecondary">
+        タグは最大{MAX_TAGS}つまで追加できます。
+      </Typography>
       {uploading ? (
         <Box sx={{ width: "100%" }}>
           <LinearProgress variant="determinate" value={progress} />
