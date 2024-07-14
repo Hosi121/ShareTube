@@ -29,10 +29,15 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const user = await getCurrentUser();
-      setCurrentUser(user);
-      setLoading(false);
-      setShowSplash(false);
+      try {
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error("Failed to fetch current user", error);
+      } finally {
+        setLoading(false);
+        setShowSplash(false);
+      }
     };
 
     fetchCurrentUser();
@@ -66,7 +71,7 @@ const App: React.FC = () => {
               </MainLayout>
             }
           >
-            <Route path="/user" element={<Profile />} />
+            <Route path="/user/:username" element={<Profile />} />
             <Route path="/play/:videoId" element={<VideoPlay />} />
             <Route path="/search" element={<SearchResults />} />
           </Route>

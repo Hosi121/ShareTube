@@ -35,12 +35,11 @@ const Login: React.FC = () => {
     setError("");
 
     try {
-      await login(formData);
-      navigate("/"); // ログイン成功時にホームページに遷移
+      const { username } = await login(formData);
+      navigate(`/user/${username}`); // ユーザーページへリダイレクト
     } catch (err) {
-      setError(
-        "ログインに失敗しました。メールアドレスとパスワードを確認してください。"
-      );
+      console.error("Login error details:", err);
+      setError("ログインに失敗しました。メールアドレスとパスワードを確認してください。");
     }
   };
 
