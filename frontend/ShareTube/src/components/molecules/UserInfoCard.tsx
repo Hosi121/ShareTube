@@ -29,10 +29,13 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({
 
   return (
     <Card
-      sx={{ background: "linear-Gradient(135deg, #667eea 0%, #764ba2 100%)" }}
+      sx={{ background: "linear-Gradient(135deg, #667eea 0%, #764ba2 100%)"}}
     >
       <CardContent sx={{ display: "flex", alignItems: "center", padding: 4 }}>
-        <LargeAvatar alt={user.username}>
+        <LargeAvatar
+          alt={user.username}
+          sx={{ marginRight: 2 }}
+        >
           {getInitials(user.username)}
         </LargeAvatar>
         <Box sx={{ flexGrow: 1 }}>
