@@ -10,6 +10,7 @@ type Comment struct {
     VideoID   uint      `json:"video_id" gorm:"not null"`
     UserID    uint      `json:"user_id" gorm:"not null"`
     Comment   string    `json:"comment" gorm:"not null"`
+    Likes     int       `json:"likes" gorm:"default:0"`
     CreatedAt time.Time `json:"created_at" gorm:"not null"`
 }
 
