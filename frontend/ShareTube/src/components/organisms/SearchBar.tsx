@@ -39,6 +39,7 @@ export const SearchForm: React.FC<SearchFormProps> = ({
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         size={isCompact ? "small" : "medium"}
+        sx={isCompact ? { width: '80%' } : {}}
       />
       <IconButton
         type="submit"

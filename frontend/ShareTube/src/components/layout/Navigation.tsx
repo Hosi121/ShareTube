@@ -19,6 +19,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
 import SearchForm from "../organisms/SearchBar";
 import { User } from "../../types/user"; // User型をインポート
+import VideoUploadButton from "../molecules/videoUploadButton";
 
 const LogoLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -61,9 +62,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
         <ListItem button component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
-        <ListItem button component={Link} to="/upload">
-          <ListItemText primary="Upload" />
-        </ListItem>
+        <VideoUploadButton/>
         {currentUser ? (
           <ListItem button component={Link} to="/user">
             <ListItemText primary="My Profile" />
@@ -125,14 +124,12 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               onSubmit={handleSearch}
-              isCompact={isMobile}
+              isCompact={true}
             />
           </Box>
           {!isMobile && (
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Button color="inherit" component={Link} to="/upload">
-                動画をアップロード
-              </Button>
+              <VideoUploadButton/>
               {currentUser ? (
                 <Button
                   color="inherit"
