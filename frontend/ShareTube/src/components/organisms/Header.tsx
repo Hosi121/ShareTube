@@ -54,13 +54,17 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleShareTubeButtonClick = () => {
+    navigate("/home");
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         ShareTube
       </Typography>
       <List>
-        <ListItem button component={Link} to="/">
+        <ListItem button onClick={handleShareTubeButtonClick}>
           <ListItemText primary="Home" />
         </ListItem>
         <VideoUploadButton />

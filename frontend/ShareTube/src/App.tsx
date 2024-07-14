@@ -21,6 +21,9 @@ import { MainLayout } from "./components/molecules/MainLayout";
 import LoadingScreen from "./components/organisms/LoadingScreen";
 import SplashScreen from "./components/organisms/SplashScreen";
 import SearchResults from "./components/pages/SearchResult";
+import MainMenu from "./components/pages/MainMenu";
+import EduHome from "./components/pages/EduHome";
+import EduHeader from "./components/organisms/EduHeader";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -58,7 +61,18 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          
           <Route path="/upload" element={<Upload />} />
+          <Route path="/mainmenu" element={<MainMenu/>}/>
+          <Route
+            path="/eduhome"
+            element={
+              <>
+                <EduHeader />
+                <EduHome />
+              </>
+            }
+          />
           <Route
             element={
               <MainLayout currentUser={currentUser}>
@@ -70,7 +84,7 @@ const App: React.FC = () => {
             <Route path="/play/:videoId" element={<VideoPlay />} />
             <Route path="/search" element={<SearchResults />} />
           </Route>
-          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/" element={<Navigate to="/mainmenu" />} />
         </Routes>
       </Router>
     </ThemeProvider>
