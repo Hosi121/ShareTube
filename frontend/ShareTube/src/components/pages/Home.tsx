@@ -49,7 +49,7 @@ const Home: React.FC = () => {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               onSubmit={handleSearch}
-              isCompact={false}
+              size="medium"
             />
             <Typography
               variant="body1"
