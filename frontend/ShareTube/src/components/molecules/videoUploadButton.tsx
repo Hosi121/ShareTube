@@ -1,13 +1,21 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Button, ButtonProps } from "@mui/material";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
+import { useNavigate } from "react-router-dom";
 
-const VideoUploadButton = () => {
+interface VideoUploadButtonProps extends ButtonProps {
+  isCompact?: boolean;
+}
+
+const VideoUploadButton: React.FC<VideoUploadButtonProps> = ({
+  isCompact,
+  sx,
+  ...props
+}) => {
   const navigate = useNavigate();
 
   const handleUploadClick = () => {
-    navigate('/upload');
+    navigate("/upload");
   };
 
   return (
@@ -15,10 +23,19 @@ const VideoUploadButton = () => {
       variant="contained"
       color="primary"
       startIcon={<VideoLibraryIcon />}
-      sx={{ mt: 2, borderRadius: 28, py: 1 }}
+      sx={{
+        borderRadius: 28,
+        py: 1,
+        ...(isCompact && {
+          minWidth: "auto",
+          px: 1,
+        }),
+        ...sx,
+      }}
       onClick={handleUploadClick}
+      {...props}
     >
-      新しい動画をアップロード
+      {isCompact ? <VideoLibraryIcon /> : "動画をアップロード"}
     </Button>
   );
 };

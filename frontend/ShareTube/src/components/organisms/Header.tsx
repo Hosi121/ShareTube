@@ -17,9 +17,10 @@ import {
 import { styled, alpha } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useNavigate } from "react-router-dom";
-import SearchForm from "../organisms/SearchBar";
+import SearchForm from "./SearchBar";
 import { User } from "../../types/user"; // User型をインポート
 import VideoUploadButton from "../molecules/videoUploadButton";
+import LoginButton from "../molecules/LoginButton";
 
 const LogoLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
@@ -62,7 +63,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
         <ListItem button component={Link} to="/">
           <ListItemText primary="Home" />
         </ListItem>
-        <VideoUploadButton/>
+        <VideoUploadButton />
         {currentUser ? (
           <ListItem button component={Link} to="/user">
             <ListItemText primary="My Profile" />
@@ -88,7 +89,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
           borderColor: "divider",
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", alignItems: "center" }}>
           {isMobile && (
             <IconButton
               color="inherit"
@@ -117,19 +118,21 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
               display: "flex",
               justifyContent: "center",
               maxWidth: 600,
+              width: "100%",
               margin: "0 auto",
+              padding: "4px 0", // 上下のパディングを追加
             }}
           >
             <SearchForm
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               onSubmit={handleSearch}
-              isCompact={true}
+              size={isMobile ? "small" : "medium"}
             />
           </Box>
           {!isMobile && (
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <VideoUploadButton/>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <VideoUploadButton sx={{ height: "36px" }} />
               {currentUser ? (
                 <Button
                   color="inherit"
@@ -147,9 +150,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
                   {currentUser.username}
                 </Button>
               ) : (
-                <Button color="inherit" component={Link} to="/login">
-                  ログイン
-                </Button>
+                <LoginButton sx={{ height: "36px" }} />
               )}
             </Box>
           )}
