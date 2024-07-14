@@ -8,4 +8,5 @@ import (
 func CommentRoutes(router *gin.Engine) {
     router.GET("/comments/:video_id", controllers.GetComments)
     router.POST("/comments", controllers.PostComment)
+    router.POST("/comments/:comment_id/like", controllers.LikeComment)
 }
