@@ -34,7 +34,7 @@ const UserInfoCard: React.FC<UserInfoCardProps> = ({
       <CardContent sx={{ display: "flex", alignItems: "center", padding: 4 }}>
         <LargeAvatar
           alt={user.username}
-          sx={{ marginRight: 2 }}
+          sx={{ mariginLeft: 10, marginRight: 10 }}
         >
           {getInitials(user.username)}
         </LargeAvatar>
