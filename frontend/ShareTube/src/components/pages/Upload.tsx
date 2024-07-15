@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Paper, Typography, styled } from '@mui/material';
 import UploadForm from '../organisms/UploadForm';
 import { UploadVideoInput } from '../../types/video';
-
+import { uploadVideo } from '../../services/videoService'; // import the uploadVideo functi
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   background: theme.palette.background.default,
@@ -13,6 +13,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 const Upload: React.FC = () => {
   const handleSubmit = async (videoInput: UploadVideoInput, tags: string[]) => {
     console.log('Uploading video:', videoInput, 'with tags:', tags);
+    await uploadVideo(videoInput);
     await new Promise(resolve => setTimeout(resolve, 2000));
   };
 

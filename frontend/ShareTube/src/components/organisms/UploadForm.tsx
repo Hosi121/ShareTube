@@ -6,16 +6,17 @@ import FileUpload from "../molecules/FileUpload";
 import TagInput from "../molecules/TagInput";
 import TagList from "../molecules/TagList";
 import { UploadVideoInput } from "../../types/video";
+import { uploadVideo } from "../../services/videoService"; // import the uploadVideo function
 
 interface UploadFormProps {
-  onSubmit: (videoInput: UploadVideoInput, tags: string[]) => Promise<void>;
+  onSubmit?: (videoInput: UploadVideoInput, tags: string[]) => Promise<void>;
 }
 
 const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
   const [videoInput, setVideoInput] = useState<UploadVideoInput>({
     title: "",
     description: "",
-    file: null as unknown as File,
+    file: null as File | null,
   });
   const [tags, setTags] = useState<string[]>([]);
   const [currentTag, setCurrentTag] = useState<string>("");
@@ -42,13 +43,14 @@ const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
     }
   };
 
-  const handleFileChange = (file: File) => {
+  const handleFileChange = (file: File | null) => {
     if (file) {
+      console.log("Selected file:", file);  // コンソールログでファイルを確認
       setVideoInput((prev) => ({ ...prev, file }));
       setFileName(file.name);
       setError("");
     } else {
-      setVideoInput((prev) => ({ ...prev, file: null as unknown as File }));
+      setVideoInput((prev) => ({ ...prev, file: null }));
       setFileName("");
     }
   };
@@ -72,9 +74,17 @@ const UploadForm: React.FC<UploadFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!videoInput.file) {
+      setError("ファイルが選択されていません。");
+      return;
+    }
     setUploading(true);
     try {
-      await onSubmit(videoInput, tags);
+      if (onSubmit) {
+        await onSubmit(videoInput, tags);
+      } else {
+        await uploadVideo(videoInput);
+      }
       // Reset form or show success message
     } catch (error) {
       setError("アップロードに失敗しました。");
