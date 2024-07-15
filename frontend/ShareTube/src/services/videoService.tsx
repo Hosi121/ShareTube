@@ -38,23 +38,26 @@ export const fetchVideos = async (params?: {
   }
 };
 
-export const uploadVideo = async (
-  videoData: UploadVideoInput
-): Promise<Video> => {
+export const uploadVideo = async (videoData: UploadVideoInput): Promise<Video> => {
   try {
     const formData = new FormData();
-    formData.append("title", videoData.title);
-    formData.append("description", videoData.description);
-    formData.append("file", videoData.file);
+    formData.append('title', videoData.title);
+    formData.append('description', videoData.description);
+    formData.append('file', videoData.file);
 
-    const response = await api.post<Video>(`/videos`, formData, {
+    console.log('FormData:', formData); // FormDataの内容をログに出力
+
+    const response = await api.post<Video>('/upload', formData, {
       headers: {
-        "Content-Type": "multipart/form-data",
+        'Content-Type': 'multipart/form-data',
       },
     });
+
+    console.log('Response:', response.data); // レスポンスをログに出力
+
     return response.data;
   } catch (error) {
-    console.error("Error uploading video:", error);
+    console.error('Error uploading video:', error);
     throw error;
   }
 };
