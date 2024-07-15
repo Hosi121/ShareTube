@@ -4,8 +4,8 @@ import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface SearchContainerProps {
-  width?: string | number;
-  height?: string | number;
+  width?: string;
+  height?: string;
 }
 
 const SearchContainer = styled(Paper, {
@@ -71,7 +71,11 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   height,
 }) => (
   <form onSubmit={onSubmit} style={{ width: width || "100%" }}>
-    <SearchContainer elevation={0} width={width} height={height}>
+    <SearchContainer
+      elevation={0}
+      width={width?.toString()}
+      height={height?.toString()}
+    >
       <StyledInputBase
         placeholder="動画を検索..."
         value={searchQuery}
