@@ -5,6 +5,6 @@ import (
     "backend/controllers"
 )
 
-func AuthRoutes(r *gin.Engine) {
+func ClassRoutes(r *gin.Engine) {
     r.POST("/class", controllers.RegisterClass)
 }
