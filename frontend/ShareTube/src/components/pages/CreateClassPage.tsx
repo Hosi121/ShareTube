@@ -15,6 +15,7 @@ import { Class } from "../../types/class";
 import { classService } from "../../services/classService";
 import { useNavigate } from "react-router-dom";
 import EduCancelButton from "../molecules/EduCancelButton";
+import useUserData from "../../hooks/useUserData";
 
 const AnimatedBox = animated(Box);
 
@@ -27,6 +28,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 
 const AddClass: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useUserData();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -37,10 +39,9 @@ const AddClass: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const currentUser = { username: "山田 太郎" };
       const classToCreate = {
         ...newClass,
-        teacher: currentUser.username,
+        teacher: user.username,
       };
 
       await classService.createClass(classToCreate);
@@ -71,7 +72,7 @@ const AddClass: React.FC = () => {
           </Typography>
           <AddClassForm
             onAddClass={handleAddClass}
-            currentUserName="山田 太郎"
+            currentUserName={user}
             isLoading={isLoading}
           />
           <Grid container justifyContent="flex-end" sx={{ mt: 4 }}>

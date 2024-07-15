@@ -25,20 +25,22 @@ const AddClassForm: React.FC<AddClassFormProps> = ({
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-      <InputField
-        label="授業名"
-        value={className}
-        onChange={(e) => setclassName(e.target.value)}
-        required
-      />
-      <InputField
-        label="教室"
-        value={classLocation}
-        onChange={(e) => setClassLocation(e.target.value)}
-        required
-      />
-      <InputField label="担当教員" value={currentUserName} disabled />
+    <Box>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <InputField
+          label="授業名"
+          value={className}
+          onChange={(e) => setclassName(e.target.value)}
+          required
+        />
+        <InputField
+          label="教室"
+          value={classLocation}
+          onChange={(e) => setClassLocation(e.target.value)}
+          required
+        />
+        <InputField label="担当教員" value={currentUserName} disabled />
+      </Box>
       <Button
         type="submit"
         variant="contained"
