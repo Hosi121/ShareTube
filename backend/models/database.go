@@ -11,6 +11,10 @@ import (
 
 var DB *gorm.DB
 
+func SetDatabase(database *gorm.DB) {
+    DB = database
+}
+
 // ConnectDatabase initializes the database connection
 func ConnectDatabase() {
     var err error
@@ -31,6 +35,7 @@ func ConnectDatabase() {
 
     // Create tables
     DB.AutoMigrate(&User{})
+    DB.AutoMigrate(&Class{})
     DB.AutoMigrate(&Video{})
     DB.AutoMigrate(&Comment{})
 }

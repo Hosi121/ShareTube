@@ -33,6 +33,7 @@ func main() {
     routes.CommentRoutes(r)
     routes.VideoUploadRoutes(r)
     routes.VideoRoutes(r) 
+    routes.ClassRoutes(r)
 
     // ポートを指定してサーバーを起動
     port := os.Getenv("PORT")

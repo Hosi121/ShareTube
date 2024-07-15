@@ -6,7 +6,7 @@ export const classService = {
     classData: Omit<Class, "id" | "created_at" | "updated_at">
   ): Promise<Class> => {
     try {
-      const response = await api.post(`/classes`, classData);
+      const response = await api.post(`/class`, classData);
       return response.data;
     } catch (error) {
       console.error("Error creating class:", error);
