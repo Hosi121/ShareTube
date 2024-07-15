@@ -2,8 +2,6 @@ package models
 
 import (
     "time"
-
-    "github.com/jinzhu/gorm"
 )
 
 // User represents a user in the system
@@ -28,38 +26,33 @@ type LoginInput struct {
     Password string `json:"password" binding:"required"`
 }
 
-var db *gorm.DB
-
-// データベース接続を設定する関数
-func SetDatabase(database *gorm.DB) {
-    db = database
-}
-
-// ユーザーを作成する関数
+// CreateUser creates a new user
 func CreateUser(user *User) error {
-    return db.Create(user).Error
+    return DB.Create(user).Error
 }
 
+// GetUserByID retrieves a user by its ID
 func GetUserByID(id uint) (*User, error) {
     var user User
-    if err := db.First(&user, id).Error; err != nil {
+    if err := DB.First(&user, id).Error; err != nil {
         return nil, err
     }
     return &user, nil
 }
 
-// メールアドレスでユーザーを取得する関数
+// GetUserByEmail retrieves a user by its email
 func GetUserByEmail(email string) (*User, error) {
     var user User
-    if err := db.Where("email = ?", email).First(&user).Error; err != nil {
+    if err := DB.Where("email = ?", email).First(&user).Error; err != nil {
         return nil, err
     }
     return &user, nil
 }
 
+// GetUserByUsername retrieves a user by its username
 func GetUserByUsername(username string) (*User, error) {
     var user User
-    if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+    if err := DB.Where("username = ?", username).First(&user).Error; err != nil {
         return nil, err
     }
     return &user, nil

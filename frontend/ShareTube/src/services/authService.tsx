@@ -41,7 +41,7 @@ export const logout = async (): Promise<void> => {
 
 export const getCurrentUser = async (): Promise<User | null> => {
   try {
-    const response = await api.get<User>("/users/me"); // このエンドポイントは仮定です。実際のAPIに合わせて調整してください
+    const response = await api.get<User>("/users/admin1"); // このエンドポイントは仮定です。実際のAPIに合わせて調整してください
     return response.data;
   } catch (error) {
     console.error("Failed to fetch current user:", error);
