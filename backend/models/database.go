@@ -32,6 +32,7 @@ func ConnectDatabase() {
     // Create tables
     DB.AutoMigrate(&User{})
     DB.AutoMigrate(&Video{})
+    DB.AutoMigrate(&Comment{})
 }
 
 // ResetDatabase resets the database by dropping and recreating it
