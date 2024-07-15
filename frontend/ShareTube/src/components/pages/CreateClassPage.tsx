@@ -9,7 +9,7 @@ import {
   Paper,
   Grid,
 } from "@mui/material";
-import AddClassForm from "../organisms/AddClassForm";
+import AddClassForm from "../organisms/ClassForm";
 import { animated } from "react-spring";
 import { Class } from "../../types/class";
 import { classService } from "../../services/classService";

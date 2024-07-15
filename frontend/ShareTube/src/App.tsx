@@ -24,7 +24,7 @@ import SearchResults from "./components/pages/SearchResult";
 import MainMenu from "./components/pages/MainMenu";
 import EduHome from "./components/pages/EduHome";
 import EduHeader from "./components/organisms/EduHeader";
-import AddClass from "./components/pages/AddClass";
+import AddClass from "./components/pages/CreateClassPage";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
