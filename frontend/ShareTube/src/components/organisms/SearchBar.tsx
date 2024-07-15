@@ -3,10 +3,18 @@ import { Paper, IconButton, InputBase } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 
-const SearchContainer = styled(Paper)(({ theme }) => ({
+interface SearchContainerProps {
+  width?: string;
+  height?: string;
+}
+
+const SearchContainer = styled(Paper, {
+  shouldForwardProp: (prop) => prop !== "width" && prop !== "height",
+})<SearchContainerProps>(({ theme, width, height }) => ({
   display: "flex",
   alignItems: "center",
-  width: "100%",
+  width: width || "100%",
+  height: height || "auto",
   borderRadius: 20,
   border: `1px solid ${theme.palette.divider}`,
   backgroundColor: theme.palette.background.paper,
@@ -16,14 +24,32 @@ const SearchContainer = styled(Paper)(({ theme }) => ({
   },
 }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+interface StyledInputBaseProps {
+  inputSize?: "small" | "medium" | "large";
+}
+
+const StyledInputBase = styled(InputBase, {
+  shouldForwardProp: (prop) => prop !== "inputSize",
+})<StyledInputBaseProps>(({ theme, inputSize }) => ({
   flex: 1,
-  paddingLeft: theme.spacing(2),
+  paddingLeft: theme.spacing(
+    inputSize === "small" ? 1 : inputSize === "medium" ? 2 : 3
+  ),
   "& input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
+    padding: theme.spacing(
+      inputSize === "small" ? 0.5 : inputSize === "medium" ? 1 : 1.5,
+      inputSize === "small" ? 0.5 : inputSize === "medium" ? 1 : 1.5,
+      inputSize === "small" ? 0.5 : inputSize === "medium" ? 1 : 1.5,
+      0
+    ),
     transition: theme.transitions.create("width"),
     width: "100%",
+    fontSize:
+      inputSize === "small"
+        ? "0.875rem"
+        : inputSize === "medium"
+          ? "1rem"
+          : "1.25rem",
   },
 }));
 
@@ -31,7 +57,9 @@ interface SearchFormProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   onSubmit: (event: React.FormEvent) => void;
-  size?: "small" | "medium";
+  size?: "small" | "medium" | "large";
+  width?: string | number;
+  height?: string | number;
 }
 
 export const SearchForm: React.FC<SearchFormProps> = ({
@@ -39,18 +67,31 @@ export const SearchForm: React.FC<SearchFormProps> = ({
   setSearchQuery,
   onSubmit,
   size = "medium",
+  width,
+  height,
 }) => (
-  <form onSubmit={onSubmit} style={{ width: "100%" }}>
-    <SearchContainer elevation={0}>
+  <form onSubmit={onSubmit} style={{ width: width || "100%" }}>
+    <SearchContainer
+      elevation={0}
+      width={width?.toString()}
+      height={height?.toString()}
+    >
       <StyledInputBase
         placeholder="動画を検索..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         inputProps={{ "aria-label": "動画を検索" }}
-        size={size}
+        inputSize={size}
       />
-      <IconButton type="submit" aria-label="search" sx={{ p: "8px" }}>
-        <SearchIcon />
+      <IconButton
+        type="submit"
+        aria-label="search"
+        sx={{
+          p: size === "small" ? "4px" : size === "medium" ? "8px" : "12px",
+          height: "100%",
+        }}
+      >
+        <SearchIcon fontSize={size} />
       </IconButton>
     </SearchContainer>
   </form>

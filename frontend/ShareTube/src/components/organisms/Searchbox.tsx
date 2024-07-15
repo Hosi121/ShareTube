@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SearchForm from '../organisms/SearchBar';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SearchForm from "../organisms/SearchBar";
 
 const SearchBox: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
   const handleSearch = (event: React.FormEvent) => {
@@ -18,7 +18,7 @@ const SearchBox: React.FC = () => {
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
       onSubmit={handleSearch}
-      isCompact={false}
+      size={"medium"}
     />
   );
 };

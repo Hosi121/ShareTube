@@ -131,7 +131,9 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
               onSubmit={handleSearch}
-              size={isMobile ? "small" : "medium"}
+              size="medium"
+              width="600px"
+              height="45px"
             />
           </Box>
           {!isMobile && (
