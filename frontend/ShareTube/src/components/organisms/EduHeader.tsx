@@ -1,7 +1,8 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Box, Container } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import LoginButton from '../molecules/LoginButton';
+import React from "react";
+import { AppBar, Toolbar, Typography, Box, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import LoginButton from "../molecules/LoginButton";
+import AddClassButton from "../molecules/AddClassButton";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -9,27 +10,30 @@ const Header: React.FC = () => {
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           <Box
             sx={{
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
             }}
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/")}
           >
-            <Typography 
-              variant="h4" 
+            <Typography
+              variant="h4"
               component="div"
-              sx={{ 
-                fontWeight: 'bold', 
-                color: '#3f51b5'
+              sx={{
+                fontWeight: "bold",
+                color: "#3f51b5",
               }}
             >
               ShareTube for Education
             </Typography>
           </Box>
-          <LoginButton />
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <AddClassButton />
+            <LoginButton />
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

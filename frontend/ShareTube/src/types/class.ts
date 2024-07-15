@@ -1,5 +1,8 @@
 export interface Class {
     id: number;
-    name: string;
-    teacher: string;
+    className: string;
+    classLocation: string;
+    teacherName: string;
+    created_at: Date;
+    updated_at: Date;
 }
