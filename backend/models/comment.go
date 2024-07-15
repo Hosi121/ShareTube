@@ -10,6 +10,7 @@ type Comment struct {
     VideoID   uint      `json:"video_id" gorm:"not null"`
     UserID    uint      `json:"user_id" gorm:"not null"`
     Comment   string    `json:"comment" gorm:"not null"`
+    Likes     int       `json:"likes" gorm:"default:0"`
     CreatedAt time.Time `json:"created_at" gorm:"not null"`
 }
 
@@ -26,4 +27,23 @@ func GetCommentsByVideoID(videoID uint) ([]Comment, error) {
         return nil, err
     }
     return comments, nil
+}
+
+func SaveComment(comment *Comment) error {
+    if err := DB.Create(comment).Error; err != nil {
+        return err
+    }
+    return nil
+}
+
+func LikeComment(commentID uint) (int, error) {
+    var comment Comment
+    if err := DB.First(&comment, commentID).Error; err != nil {
+        return 0, err
+    }
+    comment.Likes++
+    if err := DB.Save(&comment).Error; err != nil {
+        return 0, err
+    }
+    return comment.Likes, nil
 }
