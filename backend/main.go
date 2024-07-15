@@ -32,11 +32,12 @@ func main() {
     routes.ProfileRoutes(r) 
     routes.CommentRoutes(r)
     routes.VideoUploadRoutes(r)
+    routes.VideoRoutes(r) 
 
     // ポートを指定してサーバーを起動
     port := os.Getenv("PORT")
     if port == "" {
-        port = "8080"
+        port = "8081"
     }
     r.Run(":" + port)
 }

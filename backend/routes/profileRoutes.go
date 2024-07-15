@@ -6,5 +6,5 @@ import (
 )
 
 func ProfileRoutes(router *gin.Engine) {
-    router.GET("/profile/:id", controllers.GetProfile)
+    router.GET("/profile/:username", controllers.GetProfileByUsername)
 }

@@ -1,4 +1,4 @@
-import Navigation from "./Navigation";
+import Navigation from "../organisms/Header";
 import { User } from "../../types/user";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";

@@ -17,24 +17,45 @@ import { getCurrentUser } from "./services/authService";
 import { User } from "./types/user";
 import Upload from "./components/pages/Upload";
 import VideoPlay from "./components/pages/VideoPlay";
-import { MainLayout } from "./components/layout/MainLayout";
+import { MainLayout } from "./components/molecules/MainLayout";
+import LoadingScreen from "./components/organisms/LoadingScreen";
+import SplashScreen from "./components/organisms/SplashScreen";
+import SearchResults from "./components/pages/SearchResult";
+import MainMenu from "./components/pages/MainMenu";
+import EduHome from "./components/pages/EduHome";
+import EduHeader from "./components/organisms/EduHeader";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      const user = await getCurrentUser();
-      setCurrentUser(user);
-      setLoading(false);
+      try {
+        const user = await getCurrentUser();
+        setCurrentUser(user);
+      } catch (error) {
+        console.error("Failed to fetch current user", error);
+      } finally {
+        setLoading(false);
+        setShowSplash(false);
+      }
     };
 
     fetchCurrentUser();
   }, []);
 
+  const handleLoadingComplete = () => {
+    setLoading(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onLoadingComplete={handleLoadingComplete} />;
+  }
+
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (
@@ -45,7 +66,18 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
+          
           <Route path="/upload" element={<Upload />} />
+          <Route path="/mainmenu" element={<MainMenu/>}/>
+          <Route
+            path="/eduhome"
+            element={
+              <>
+                <EduHeader />
+                <EduHome />
+              </>
+            }
+          />
           <Route
             element={
               <MainLayout currentUser={currentUser}>
@@ -53,15 +85,11 @@ const App: React.FC = () => {
               </MainLayout>
             }
           >
-            <Route path="/user" element={<Profile />} />
+            <Route path="/user/:username" element={<Profile />} />
             <Route path="/play/:videoId" element={<VideoPlay />} />
+            <Route path="/search" element={<SearchResults />} />
           </Route>
-          <Route
-            path="/"
-            element={
-              currentUser ? <div>Home Page</div> : <Navigate to="/Home" />
-            }
-          />
+          <Route path="/" element={<Navigate to="/mainmenu" />} />
         </Routes>
       </Router>
     </ThemeProvider>

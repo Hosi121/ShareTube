@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+    "time"
+
+    "errors"
+)
 
 // Video represents a video in the system
 type Video struct {
@@ -21,3 +25,10 @@ type UploadVideoInput struct {
 	File        string `json:"file" binding:"required"`
 }
 
+func GetVideoByID(id uint) (Video, error) {
+    var video Video
+    if err := DB.Preload("Tags").First(&video, id).Error; err != nil {
+        return video, errors.New("video not found")
+    }
+    return video, nil
+}

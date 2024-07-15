@@ -1,12 +1,13 @@
+// src/api/comments.ts
+
 import api from "./api";
-import {VideoComment, PostCommentInput} from "../types/comment";
+import { VideoComment, PostCommentInput } from "../types/comment";
 
-
-
+// コメントの取得
 export const fetchComments = async (videoId: number): Promise<VideoComment[]> => {
   try {
     const response = await api.get<VideoComment[]>(
-      `/videos/${videoId}/comments`
+      `/comments/${videoId}`
     );
     return response.data;
   } catch (error) {
@@ -15,6 +16,7 @@ export const fetchComments = async (videoId: number): Promise<VideoComment[]> =>
   }
 };
 
+// コメントの作成
 export const createComment = async (
   commentData: PostCommentInput
 ): Promise<VideoComment> => {
@@ -30,14 +32,15 @@ export const createComment = async (
   }
 };
 
+// コメントの更新
 export const updateComment = async (
   commentId: number,
   content: string
-): Promise<Comment> => {
+): Promise<VideoComment> => {
   try {
-    const response = await api.put<Comment>(
+    const response = await api.put<VideoComment>(
       `/comments/${commentId}`,
-      { content }
+      { comment: content }
     );
     return response.data;
   } catch (error) {
@@ -46,6 +49,7 @@ export const updateComment = async (
   }
 };
 
+// コメントの削除
 export const deleteComment = async (commentId: number): Promise<void> => {
   try {
     await api.delete(`/comments/${commentId}`);
@@ -55,6 +59,7 @@ export const deleteComment = async (commentId: number): Promise<void> => {
   }
 };
 
+// コメントに「いいね」
 export const likeComment = async (commentId: number): Promise<number> => {
   try {
     const response = await api.post<{ likes: number }>(
