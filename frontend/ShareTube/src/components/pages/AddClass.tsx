@@ -1,12 +1,29 @@
 import React, { useState } from "react";
-import { Container, Box, Typography, Snackbar, Alert } from "@mui/material";
+import {
+  Container,
+  Box,
+  Typography,
+  Snackbar,
+  Alert,
+  styled,
+  Paper,
+  Grid,
+} from "@mui/material";
 import AddClassForm from "../organisms/AddClassForm";
-import { useSpring, animated } from "react-spring";
+import { animated } from "react-spring";
 import { Class } from "../../types/class";
 import { classService } from "../../services/classService";
 import { useNavigate } from "react-router-dom";
+import EduCancelButton from "../molecules/EduCancelButton";
 
 const AnimatedBox = animated(Box);
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  background: theme.palette.background.default,
+  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
+  borderRadius: theme.shape.borderRadius * 2,
+}));
 
 const AddClass: React.FC = () => {
   const navigate = useNavigate();
@@ -14,22 +31,16 @@ const AddClass: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const fadeIn = useSpring({
-    from: { opacity: 0, transform: "translateY(50px)" },
-    to: { opacity: 1, transform: "translateY(0px)" },
-    config: { duration: 1000 },
-  });
-
   const handleAddClass = async (
     newClass: Omit<Class, "id" | "created_at" | "updated_at" | "teacher">
   ) => {
     setIsLoading(true);
     setError(null);
     try {
-      const currentUser = { name: "山田 太郎" };
+      const currentUser = { username: "山田 太郎" };
       const classToCreate = {
         ...newClass,
-        teacher: currentUser.name,
+        teacher: currentUser.username,
       };
 
       await classService.createClass(classToCreate);
@@ -45,49 +56,55 @@ const AddClass: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <AnimatedBox style={fadeIn}>
-        <Typography
-          variant="h4"
-          component="h1"
-          gutterBottom
-          color="primary"
-          fontWeight="bold"
-        >
-          新しい授業を作成
-        </Typography>
-        <AddClassForm
-          onAddClass={handleAddClass}
-          currentUserName="山田 太郎"
-          isLoading={isLoading}
-        />
-        <Snackbar
-          open={!!error}
-          autoHideDuration={6000}
-          onClose={() => setError(null)}
-        >
-          <Alert
-            onClose={() => setError(null)}
-            severity="error"
-            sx={{ width: "100%" }}
+    <Container maxWidth="md" sx={{ mt: 8, mb: 4 }}>
+      <AnimatedBox>
+        <StyledPaper elevation={3}>
+          <Typography
+            variant="h4"
+            component="h1"
+            gutterBottom
+            color="primary"
+            fontWeight="bold"
+            sx={{ mb: 4 }}
           >
-            {error}
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={!!successMessage}
-          autoHideDuration={6000}
-          onClose={() => setSuccessMessage(null)}
-        >
-          <Alert
-            onClose={() => setSuccessMessage(null)}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            {successMessage}
-          </Alert>
-        </Snackbar>
+            新しい授業を作成
+          </Typography>
+          <AddClassForm
+            onAddClass={handleAddClass}
+            currentUserName="山田 太郎"
+            isLoading={isLoading}
+          />
+          <Grid container justifyContent="flex-end" sx={{ mt: 4 }}>
+            <EduCancelButton />
+          </Grid>
+        </StyledPaper>
       </AnimatedBox>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setError(null)}
+      >
+        <Alert
+          onClose={() => setError(null)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={6000}
+        onClose={() => setSuccessMessage(null)}
+      >
+        <Alert
+          onClose={() => setSuccessMessage(null)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

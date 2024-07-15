@@ -30,8 +30,10 @@ const Header: React.FC = () => {
               ShareTube for Education
             </Typography>
           </Box>
-          <AddClassButton />
-          <LoginButton />
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <AddClassButton />
+            <LoginButton />
+          </Box>
         </Toolbar>
       </Container>
     </AppBar>

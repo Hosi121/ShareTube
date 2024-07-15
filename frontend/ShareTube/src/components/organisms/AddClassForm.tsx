@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Box } from "@mui/material";
 import InputField from "../atoms/TextField";
 import Button from "../atoms/Button";
-import Typography from "../atoms/typography";
 import { Class } from "../../types/class";
 
 interface AddClassFormProps {
@@ -27,9 +26,6 @@ const AddClassForm: React.FC<AddClassFormProps> = ({
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-      <Typography variant="h5" gutterBottom>
-        新しい授業を追加
-      </Typography>
       <InputField
         label="授業名"
         value={className}
@@ -43,7 +39,12 @@ const AddClassForm: React.FC<AddClassFormProps> = ({
         required
       />
       <InputField label="担当教員" value={currentUserName} disabled />
-      <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2, borderRadius: 28 }}
+      >
         授業を追加
       </Button>
     </Box>
