@@ -38,7 +38,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const AddClass: React.FC = () => {
+const CreateClass: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useUserData();
   const [isLoading, setIsLoading] = useState(false);
@@ -164,4 +164,4 @@ const AddClass: React.FC = () => {
   );
 };
 
-export default AddClass;
+export default CreateClass;

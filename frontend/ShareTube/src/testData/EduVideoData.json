@@ -1,0 +1,63 @@
+{
+    "classId": "class123",
+    "className": "プログラミング入門",
+    "totalViews": 3500,
+    "averageRetentionRate": 78,
+    "videos": [
+      {
+        "videoId": "v1",
+        "title": "変数と定数",
+        "views": 750,
+        "averageViewDuration": 1620,
+        "totalDuration": 1800,
+        "retentionRate": 85,
+        "engagementRate": 72,
+        "likes": 120,
+        "comments": 45
+      },
+      {
+        "videoId": "v2",
+        "title": "条件分岐",
+        "views": 680,
+        "averageViewDuration": 1500,
+        "totalDuration": 1800,
+        "retentionRate": 80,
+        "engagementRate": 68,
+        "likes": 95,
+        "comments": 38
+      },
+      {
+        "videoId": "v3",
+        "title": "ループ処理",
+        "views": 620,
+        "averageViewDuration": 1380,
+        "totalDuration": 1800,
+        "retentionRate": 75,
+        "engagementRate": 65,
+        "likes": 85,
+        "comments": 30
+      },
+      {
+        "videoId": "v4",
+        "title": "関数",
+        "views": 590,
+        "averageViewDuration": 1440,
+        "totalDuration": 1800,
+        "retentionRate": 78,
+        "engagementRate": 70,
+        "likes": 100,
+        "comments": 42
+      },
+      {
+        "videoId": "v5",
+        "title": "クラスとオブジェクト",
+        "views": 540,
+        "averageViewDuration": 1560,
+        "totalDuration": 1800,
+        "retentionRate": 72,
+        "engagementRate": 62,
+        "likes": 75,
+        "comments": 28
+      }
+    ]
+  }

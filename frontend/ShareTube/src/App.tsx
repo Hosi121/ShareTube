@@ -24,7 +24,8 @@ import SearchResults from "./components/pages/SearchResult";
 import MainMenu from "./components/pages/MainMenu";
 import EduHome from "./components/pages/EduHome";
 import EduHeader from "./components/organisms/EduHeader";
-import AddClass from "./components/pages/CreateClassPage";
+import CreateClass from "./components/pages/CreateClassPage";
+import ClassAnalytics from "./components/pages/AnalyticsPage";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -67,10 +68,13 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-
           <Route path="/upload" element={<Upload />} />
           <Route path="/mainmenu" element={<MainMenu />} />
-          <Route path="/addclass" element={<AddClass />} />
+          <Route path="/createclass" element={<CreateClass />} />
+          <Route
+            path="/class/:classId/analytics"
+            element={<ClassAnalytics />}
+          />
           <Route
             path="/eduhome"
             element={
