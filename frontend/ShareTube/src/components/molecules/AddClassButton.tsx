@@ -8,7 +8,7 @@ const AddClassButton: React.FC<ButtonProps> = ({ sx, ...props }) => {
       color="primary"
       variant="contained"
       component={Link}
-      to="/addclass"
+      to="/createclass"
       sx={{
         borderRadius: 28,
         ...sx,
