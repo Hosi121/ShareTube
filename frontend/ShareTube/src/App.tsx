@@ -25,6 +25,7 @@ import MainMenu from "./components/pages/MainMenu";
 import EduHome from "./components/pages/EduHome";
 import EduHeader from "./components/organisms/EduHeader";
 import AddClass from "./components/pages/CreateClassPage";
+import ClassAnalytics from "./components/pages/AnalyticsPage";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -71,6 +72,10 @@ const App: React.FC = () => {
           <Route path="/upload" element={<Upload />} />
           <Route path="/mainmenu" element={<MainMenu />} />
           <Route path="/addclass" element={<AddClass />} />
+          <Route
+            path="/class/:classId/analytics"
+            element={<ClassAnalytics />}
+          />
           <Route
             path="/eduhome"
             element={

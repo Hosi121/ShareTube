@@ -26,3 +26,23 @@ export interface VideoDetails {
     video: Video;
     comments: VideoComment[];
 }
+
+export interface VideoAnalytics {
+    videoId: string;
+    title: string;
+    views: number;
+    averageViewDuration: number; // 秒単位
+    totalDuration: number; // 秒単位（新しく追加）
+    retentionRate: number; // パーセンテージ (0-100)
+    engagementRate: number; // パーセンテージ (0-100)
+    likes: number;
+    comments: number;
+}
+
+export interface ClassAnalytics {
+    classId: string;
+    className: string;
+    totalViews: number;
+    averageRetentionRate: number;
+    videos: VideoAnalytics[];
+}
