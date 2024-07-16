@@ -1,7 +1,7 @@
 import React from "react";
 import { Paper, Tabs, Tab, Box } from "@mui/material";
 import Chart from "../molecules/Chart";
-import { Video, VideoAnalytics } from "../../types/video";
+import { VideoAnalytics } from "../../types/video";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -25,10 +25,10 @@ function TabPanel(props: TabPanelProps) {
 }
 
 interface AnalyticsChartsProps {
-  videos: VideoAnalytics[];
+  videoAnalytics: VideoAnalytics[];
 }
 
-const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ videos }) => {
+const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ videoAnalytics }) => {
   const [tabValue, setTabValue] = React.useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -43,7 +43,7 @@ const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ videos }) => {
       </Tabs>
       <TabPanel value={tabValue} index={0}>
         <Chart
-          data={videos}
+          data={videoAnalytics}
           type="line"
           dataKey="retentionRate"
           xAxisDataKey="title"
@@ -53,7 +53,7 @@ const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ videos }) => {
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <Chart
-          data={videos}
+          data={videoAnalytics}
           type="bar"
           dataKey="engagementRate"
           xAxisDataKey="title"

@@ -81,7 +81,7 @@ const ClassAnalytics: React.FC = () => {
         teacherName={classInfo.teacherName}
       />
       <Box sx={{ mt: 4 }}>
-        <AnalyticsCharts videos={analytics.videos} />
+        <AnalyticsCharts videoAnalytics={analytics.videos} />
       </Box>
     </Container>
   );
