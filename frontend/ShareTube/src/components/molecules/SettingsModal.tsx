@@ -27,7 +27,6 @@ interface SettingsModalProps {
 const SettingsModal: React.FC<SettingsModalProps> = ({
   open,
   onClose,
-  user,
   onSave,
 }) => {
   const [notifications, setNotifications] = useState(true);

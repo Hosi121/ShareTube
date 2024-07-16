@@ -1,12 +1,7 @@
 import React from "react";
 import { Grid } from "@mui/material";
 import ClassCard from "./ClassCard";
-
-interface Class {
-  id: number;
-  name: string;
-  teacher: string;
-}
+import { Class } from "../../types/class";
 
 interface ClassListProps {
   classes: Class[];
@@ -19,8 +14,9 @@ const ClassList: React.FC<ClassListProps> = ({ classes, onClassSelect }) => {
       {classes.map((cls) => (
         <Grid item xs={12} sm={6} md={4} key={cls.id}>
           <ClassCard
-            name={cls.name}
-            teacher={cls.teacher}
+            className={cls.className}
+            teacherName={cls.teacherName}
+            classLocation={cls.classLocation}
             onClick={() => onClassSelect(cls.id.toString())}
           />
         </Grid>

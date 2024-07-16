@@ -13,7 +13,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/pages/Profile";
 import Home from "./components/pages/Home";
-import { getCurrentUser } from "./services/authService";
+import { getProfileByUsername } from "./services/authService";
 import { User } from "./types/user";
 import Upload from "./components/pages/Upload";
 import VideoPlay from "./components/pages/VideoPlay";
@@ -24,6 +24,9 @@ import SearchResults from "./components/pages/SearchResult";
 import MainMenu from "./components/pages/MainMenu";
 import EduHome from "./components/pages/EduHome";
 import EduHeader from "./components/organisms/EduHeader";
+import CreateClass from "./components/pages/CreateClassPage";
+import ClassAnalytics from "./components/pages/AnalyticsPage";
+import Header from "./components/organisms/Header";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -31,19 +34,24 @@ const App: React.FC = () => {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        setCurrentUser(user);
-      } catch (error) {
-        console.error("Failed to fetch current user", error);
-      } finally {
-        setLoading(false);
-        setShowSplash(false);
-      }
-    };
-
-    fetchCurrentUser();
+    const username = localStorage.getItem("username");
+    if (username) {
+      const fetchCurrentUser = async () => {
+        try {
+          const user = await getProfileByUsername(username);
+          setCurrentUser(user);
+        } catch (error) {
+          console.error("Failed to fetch current user", error);
+        } finally {
+          setLoading(false);
+          setShowSplash(false);
+        }
+      };
+      fetchCurrentUser();
+    } else {
+      setLoading(false);
+      setShowSplash(false);
+    }
   }, []);
 
   const handleLoadingComplete = () => {
@@ -63,33 +71,49 @@ const App: React.FC = () => {
       <CssBaseline />
       <Router>
         <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Navigate to="/mainmenu" />} />
+          <Route path="/mainmenu" element={<MainMenu />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          
           <Route path="/upload" element={<Upload />} />
-          <Route path="/mainmenu" element={<MainMenu/>}/>
           <Route
-            path="/eduhome"
+            path="/eduhome/*"
             element={
               <>
-                <EduHeader />
-                <EduHome />
+                <EduHeader currentUser={currentUser} />
+                <Routes>
+                  <Route path="/" element={<EduHome />} />
+                  <Route path="createclass" element={<CreateClass />} />
+                  <Route
+                    path="class/:classId/analytics"
+                    element={<ClassAnalytics />}
+                  />
+                </Routes>
               </>
             }
           />
           <Route
+            path="/*"
             element={
-              <MainLayout currentUser={currentUser}>
-                <Outlet />
-              </MainLayout>
+              <>
+                <Header currentUser={currentUser} />
+                <Routes>
+                  <Route path="/user/:username" element={<Profile />} />
+                  <Route path="/play/:videoId" element={<VideoPlay />} />
+                  <Route path="/search" element={<SearchResults />} />
+                  <Route
+                    path="/"
+                    element={
+                      <MainLayout currentUser={currentUser}>
+                        <Outlet />
+                      </MainLayout>
+                    }
+                  ></Route>
+                </Routes>
+              </>
             }
-          >
-            <Route path="/user/:username" element={<Profile />} />
-            <Route path="/play/:videoId" element={<VideoPlay />} />
-            <Route path="/search" element={<SearchResults />} />
-          </Route>
-          <Route path="/" element={<Navigate to="/mainmenu" />} />
+          />
         </Routes>
       </Router>
     </ThemeProvider>
