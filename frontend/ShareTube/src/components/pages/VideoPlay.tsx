@@ -6,7 +6,7 @@ import { createComment } from '../../services/commentService';
 import { VideoDetails } from '../../types/video';
 import { PostCommentInput } from '../../types/comment';
 import { User } from '../../types/user';
-import { getCurrentUser } from '../../services/authService';
+import { getProfileByUsername } from '../../services/authService';
 
 const VideoPlayerPage: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
@@ -27,11 +27,14 @@ const VideoPlayerPage: React.FC = () => {
     };
 
     const loadCurrentUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        setCurrentUser(user);
-      } catch (error) {
-        console.error('Error loading current user:', error);
+      const username = localStorage.getItem('username');
+      if (username) {
+        try {
+          const user = await getProfileByUsername(username);
+          setCurrentUser(user);
+        } catch (error) {
+          console.error('Error loading current user:', error);
+        }
       }
     };
 

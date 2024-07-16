@@ -38,7 +38,7 @@ interface NavigationProps {
   currentUser: User | null;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
+const Header: React.FC<NavigationProps> = ({ currentUser }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -67,9 +67,11 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
         <ListItem button onClick={handleShareTubeButtonClick}>
           <ListItemText primary="Home" />
         </ListItem>
-        <VideoUploadButton />
+        <ListItem>
+          <VideoUploadButton sx={{ height: "36px" }} />
+        </ListItem>
         {currentUser ? (
-          <ListItem button component={Link} to="/user">
+          <ListItem button component={Link} to={`/user/${currentUser.username}`}>
             <ListItemText primary="My Profile" />
           </ListItem>
         ) : (
@@ -143,7 +145,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
                 <Button
                   color="inherit"
                   component={Link}
-                  to="/user"
+                  to={`/user/${currentUser.username}`} // ここで動的にリンクを生成
                   startIcon={
                     <Avatar
                       src={currentUser.avatar_url}
@@ -182,4 +184,4 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
   );
 };
 
-export default Navigation;
+export default Header;
