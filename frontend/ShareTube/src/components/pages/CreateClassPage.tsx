@@ -54,19 +54,20 @@ const CreateClass: React.FC = () => {
       const newClass: Omit<Class, "id" | "created_at" | "updated_at"> = {
         className: className,
         classLocation: classRoom,
-        teacherName: user.username,
+        teacherName: "teacher",
       };
       const classToCreate = {
         ...newClass,
-        teacher: user.username,
+        teacher: "teacher",
       };
       await classService.createClass(classToCreate);
       setSuccessMessage("授業が正常に作成されました。");
       setTimeout(() => {
         navigate("/eduhome");
       }, 2000);
-    } catch (err) {
-      setError("授業の作成中にエラーが発生しました。もう一度お試しください。");
+    } catch (err: any) {
+      console.error(err); // エラー内容をコンソールに表示
+      setError(`授業の作成中にエラーが発生しました: ${err.message || "もう一度お試しください。"}`);
     } finally {
       setIsLoading(false);
     }
