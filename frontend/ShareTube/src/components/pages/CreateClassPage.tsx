@@ -46,8 +46,17 @@ const CreateClass: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [className, setClassName] = useState("");
   const [classRoom, setClassRoom] = useState("");
+  const [classNameError, setClassNameError] = useState(false);
+  const [classRoomError, setClassRoomError] = useState(false);
 
   const handleAddClass = async () => {
+    setClassNameError(!className);
+    setClassRoomError(!classRoom);
+    if (!className || !classRoom) {
+      setError("すべてのフィールドを入力してください。");
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     try {
@@ -56,11 +65,7 @@ const CreateClass: React.FC = () => {
         classLocation: classRoom,
         teacherName: "teacher",
       };
-      const classToCreate = {
-        ...newClass,
-        teacher: "teacher",
-      };
-      await classService.createClass(classToCreate);
+      await classService.createClass(newClass);
       setSuccessMessage("授業が正常に作成されました。");
       setTimeout(() => {
         navigate("/eduhome");
@@ -95,7 +100,12 @@ const CreateClass: React.FC = () => {
             label="授業名"
             variant="outlined"
             value={className}
-            onChange={(e) => setClassName(e.target.value)}
+            onChange={(e) => {
+              setClassName(e.target.value);
+              setClassNameError(false);
+            }}
+            error={classNameError}
+            helperText={classNameError ? "授業名を入力してください。" : ""}
             required
           />
           <StyledTextField
@@ -103,7 +113,12 @@ const CreateClass: React.FC = () => {
             label="教室"
             variant="outlined"
             value={classRoom}
-            onChange={(e) => setClassRoom(e.target.value)}
+            onChange={(e) => {
+              setClassRoom(e.target.value);
+              setClassRoomError(false);
+            }}
+            error={classRoomError}
+            helperText={classRoomError ? "教室を入力してください。" : ""}
             required
           />
           <Grid container spacing={2} sx={{ mt: 4 }}>
@@ -114,7 +129,7 @@ const CreateClass: React.FC = () => {
                 color="primary"
                 size="large"
                 onClick={handleAddClass}
-                disabled={isLoading}
+                disabled={isLoading || !className || !classRoom}
                 sx={{ sx: 2, borderRadius: 28 }}
               >
                 授業を追加
