@@ -10,9 +10,10 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+import { VideoAnalytics } from "../../types/video";
 
 interface ChartProps {
-  data: any[];
+  data: VideoAnalytics[];
   type: "line" | "bar";
   dataKey: string;
   xAxisDataKey: string;

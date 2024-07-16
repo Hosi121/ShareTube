@@ -1,6 +1,7 @@
 import React from "react";
 import { Paper, Tabs, Tab, Box } from "@mui/material";
 import Chart from "../molecules/Chart";
+import { Video, VideoAnalytics } from "../../types/video";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -24,7 +25,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 interface AnalyticsChartsProps {
-  videos: any[];
+  videos: VideoAnalytics[];
 }
 
 const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ videos }) => {
