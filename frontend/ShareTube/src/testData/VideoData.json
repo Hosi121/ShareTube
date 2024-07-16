@@ -1,0 +1,42 @@
+{
+    "video": {
+      "id": 1,
+      "user_id": 1,
+      "title": "サンプル動画",
+      "description": "これはテスト用のサンプル動画です。",
+      "video_url": "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4",
+      "likes": 100,
+      "created_at": "2023-07-17T12:00:00Z",
+      "tags": [
+        { "id": 1, "name": "サンプル" },
+        { "id": 2, "name": "テスト" }
+      ]
+    },
+    "comments": [
+      {
+        "id": 1,
+        "video_id": 1,
+        "user_id": 1,
+        "comment": "素晴らしい動画ですね！",
+        "timestamp": "2023-07-17T12:30:00Z",
+        "user": {
+          "id": 1,
+          "username": "testuser",
+          "email": "commenter@example.com",
+          "avatar_url": "/path/to/commenter_avatar.jpg"
+        }
+      }
+    ],
+    "videoOwner": {
+      "id": 1,
+      "username": "テストユーザー",
+      "email": "test@example.com",
+      "avatar_url": "/path/to/avatar.jpg"
+    },
+    "currentUser": {
+      "id": 2,
+      "username": "admin1",
+      "email": "current@example.com",
+      "avatar_url": "/path/to/current_avatar.jpg"
+    }
+  }
