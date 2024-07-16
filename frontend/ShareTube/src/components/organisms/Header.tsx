@@ -71,7 +71,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
           <VideoUploadButton sx={{ height: "36px" }} />
         </ListItem>
         {currentUser ? (
-          <ListItem button component={Link} to="/user">
+          <ListItem button component={Link} to={`/user/${currentUser.username}`}>
             <ListItemText primary="My Profile" />
           </ListItem>
         ) : (
@@ -145,7 +145,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
                 <Button
                   color="inherit"
                   component={Link}
-                  to="/user"
+                  to={`/user/${currentUser.username}`} // ここで動的にリンクを生成
                   startIcon={
                     <Avatar
                       src={currentUser.avatar_url}
