@@ -11,9 +11,7 @@ const mockClassInfo: Class = {
   updated_at: new Date("2023-07-15"),
 };
 
-export const getClassAnalytics = async (
-  classId: string
-): Promise<ClassAnalytics> => {
+export const getClassAnalytics = async (): Promise<ClassAnalytics> => {
   // 実際のAPIリクエストの代わりに、モックデータを返す
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -22,7 +20,7 @@ export const getClassAnalytics = async (
   });
 };
 
-export const getClassInfo = async (classId: string): Promise<Class> => {
+export const getClassInfo = async (): Promise<Class> => {
   // 実際のAPIリクエストの代わりに、モックデータを返す
   return new Promise((resolve) => {
     setTimeout(() => {

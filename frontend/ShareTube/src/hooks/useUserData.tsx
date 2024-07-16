@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { User } from "../types/user";
 import api from "../services/api";
 
 const useUserData = () => {
   const { username } = useParams<{ username: string }>();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,8 +16,13 @@ const useUserData = () => {
 
         const response = await api.get(`profile/${username}`);
         setUser(response.data);
-      } catch (err) {
-        setError(err.message);
+      } catch (err : any) {
+        console.log(typeof err);
+        // if (typeof err === "string") {
+        //   {err}setError(err);
+        // }else {
+        //   setError("unknown error");
+        // }
       } finally {
         setIsLoading(false);
       }
