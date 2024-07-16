@@ -38,7 +38,7 @@ interface NavigationProps {
   currentUser: User | null;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
+const Header: React.FC<NavigationProps> = ({ currentUser }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
@@ -184,4 +184,4 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
   );
 };
 
-export default Navigation;
+export default Header;

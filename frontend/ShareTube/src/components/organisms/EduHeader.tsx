@@ -3,8 +3,13 @@ import { AppBar, Toolbar, Typography, Box, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../molecules/LoginButton";
 import AddClassButton from "../molecules/AddClassButton";
+import { User } from "../../types/user";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  currentUser: User | null;
+}
+
+const EduHeader: React.FC<HeaderProps> = ({ currentUser }) => {
   const navigate = useNavigate();
 
   return (
@@ -32,7 +37,7 @@ const Header: React.FC = () => {
           </Box>
           <Box sx={{ display: "flex", gap: 2 }}>
             <AddClassButton />
-            <LoginButton />
+            {!currentUser && <LoginButton />}
           </Box>
         </Toolbar>
       </Container>
@@ -40,4 +45,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default EduHeader;

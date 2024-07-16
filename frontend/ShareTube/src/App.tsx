@@ -26,6 +26,7 @@ import EduHome from "./components/pages/EduHome";
 import EduHeader from "./components/organisms/EduHeader";
 import CreateClass from "./components/pages/CreateClassPage";
 import ClassAnalytics from "./components/pages/AnalyticsPage";
+import Header from "./components/organisms/Header";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -70,34 +71,47 @@ const App: React.FC = () => {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/mainmenu" element={<MainMenu />} />
-          <Route path="/createclass" element={<CreateClass />} />
-          <Route path="/class/:classId/analytics" element={<ClassAnalytics />} />
           <Route
-            path="/eduhome"
+            path="/eduhome/*"
             element={
               <>
-                <EduHeader />
-                <EduHome />
+                <EduHeader currentUser={currentUser}  />
+                <Routes>
+                  <Route path="/" element={<EduHome />} />
+                  <Route path="createclass" element={<CreateClass />} />
+                  <Route path="class/:classId/analytics" element={<ClassAnalytics />} />
+                </Routes>
               </>
             }
           />
           <Route
+            path="/*"
             element={
-              <MainLayout currentUser={currentUser}>
-                <Outlet />
-              </MainLayout>
+              <>
+                <Header currentUser={currentUser} />
+                <Routes>
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/home" element={<Home />} />
+                  <Route path="/upload" element={<Upload />} />
+                  <Route path="/mainmenu" element={<MainMenu />} />
+                  <Route
+                    path="/"
+                    element={
+                      <MainLayout currentUser={currentUser}>
+                        <Outlet />
+                      </MainLayout>
+                    }
+                  >
+                    <Route path="/user/:username" element={<Profile />} />
+                    <Route path="/play/:videoId" element={<VideoPlay />} />
+                    <Route path="/search" element={<SearchResults />} />
+                  </Route>
+                  <Route path="/" element={<Navigate to="/mainmenu" />} />
+                </Routes>
+              </>
             }
-          >
-            <Route path="/user/:username" element={<Profile />} />
-            <Route path="/play/:videoId" element={<VideoPlay />} />
-            <Route path="/search" element={<SearchResults />} />
-          </Route>
-          <Route path="/" element={<Navigate to="/mainmenu" />} />
+          />
         </Routes>
       </Router>
     </ThemeProvider>
