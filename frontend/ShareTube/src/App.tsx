@@ -71,15 +71,24 @@ const App: React.FC = () => {
       <CssBaseline />
       <Router>
         <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Navigate to="/mainmenu" />} />
+          <Route path="/mainmenu" element={<MainMenu />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/upload" element={<Upload />} />
           <Route
             path="/eduhome/*"
             element={
               <>
-                <EduHeader currentUser={currentUser}  />
+                <EduHeader currentUser={currentUser} />
                 <Routes>
                   <Route path="/" element={<EduHome />} />
                   <Route path="createclass" element={<CreateClass />} />
-                  <Route path="class/:classId/analytics" element={<ClassAnalytics />} />
+                  <Route
+                    path="class/:classId/analytics"
+                    element={<ClassAnalytics />}
+                  />
                 </Routes>
               </>
             }
@@ -90,11 +99,9 @@ const App: React.FC = () => {
               <>
                 <Header currentUser={currentUser} />
                 <Routes>
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/upload" element={<Upload />} />
-                  <Route path="/mainmenu" element={<MainMenu />} />
+                  <Route path="/user/:username" element={<Profile />} />
+                  <Route path="/play/:videoId" element={<VideoPlay />} />
+                  <Route path="/search" element={<SearchResults />} />
                   <Route
                     path="/"
                     element={
@@ -102,12 +109,7 @@ const App: React.FC = () => {
                         <Outlet />
                       </MainLayout>
                     }
-                  >
-                    <Route path="/user/:username" element={<Profile />} />
-                    <Route path="/play/:videoId" element={<VideoPlay />} />
-                    <Route path="/search" element={<SearchResults />} />
-                  </Route>
-                  <Route path="/" element={<Navigate to="/mainmenu" />} />
+                  ></Route>
                 </Routes>
               </>
             }
