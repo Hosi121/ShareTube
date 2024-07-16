@@ -13,7 +13,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/pages/Profile";
 import Home from "./components/pages/Home";
-import { getCurrentUser } from "./services/authService";
+import { getProfileByUsername } from "./services/authService";
 import { User } from "./types/user";
 import Upload from "./components/pages/Upload";
 import VideoPlay from "./components/pages/VideoPlay";
@@ -33,19 +33,24 @@ const App: React.FC = () => {
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const user = await getCurrentUser();
-        setCurrentUser(user);
-      } catch (error) {
-        console.error("Failed to fetch current user", error);
-      } finally {
-        setLoading(false);
-        setShowSplash(false);
-      }
-    };
-
-    fetchCurrentUser();
+    const username = localStorage.getItem("username");
+    if (username) {
+      const fetchCurrentUser = async () => {
+        try {
+          const user = await getProfileByUsername(username);
+          setCurrentUser(user);
+        } catch (error) {
+          console.error("Failed to fetch current user", error);
+        } finally {
+          setLoading(false);
+          setShowSplash(false);
+        }
+      };
+      fetchCurrentUser();
+    } else {
+      setLoading(false);
+      setShowSplash(false);
+    }
   }, []);
 
   const handleLoadingComplete = () => {
@@ -71,10 +76,7 @@ const App: React.FC = () => {
           <Route path="/upload" element={<Upload />} />
           <Route path="/mainmenu" element={<MainMenu />} />
           <Route path="/createclass" element={<CreateClass />} />
-          <Route
-            path="/class/:classId/analytics"
-            element={<ClassAnalytics />}
-          />
+          <Route path="/class/:classId/analytics" element={<ClassAnalytics />} />
           <Route
             path="/eduhome"
             element={

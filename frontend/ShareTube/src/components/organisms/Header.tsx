@@ -67,7 +67,9 @@ const Navigation: React.FC<NavigationProps> = ({ currentUser }) => {
         <ListItem button onClick={handleShareTubeButtonClick}>
           <ListItemText primary="Home" />
         </ListItem>
-        <VideoUploadButton />
+        <ListItem>
+          <VideoUploadButton sx={{ height: "36px" }} />
+        </ListItem>
         {currentUser ? (
           <ListItem button component={Link} to="/user">
             <ListItemText primary="My Profile" />
