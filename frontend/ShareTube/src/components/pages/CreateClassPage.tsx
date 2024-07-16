@@ -8,22 +8,34 @@ import {
   styled,
   Paper,
   Grid,
+  TextField,
+  Button,
 } from "@mui/material";
-import AddClassForm from "../organisms/ClassForm";
 import { animated } from "react-spring";
 import { Class } from "../../types/class";
 import { classService } from "../../services/classService";
 import { useNavigate } from "react-router-dom";
-import EduCancelButton from "../molecules/EduCancelButton";
 import useUserData from "../../hooks/useUserData";
 
 const AnimatedBox = animated(Box);
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(4),
+  padding: theme.spacing(6),
   background: theme.palette.background.default,
-  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-  borderRadius: theme.shape.borderRadius * 2,
+  boxShadow: "0 12px 40px rgba(0, 0, 0, 0.1)",
+  borderRadius: theme.shape.borderRadius * 3,
+  maxWidth: 600,
+  margin: "0 auto",
+}));
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  marginBottom: theme.spacing(3),
+  "& .MuiOutlinedInput-root": {
+    fontSize: "1.1rem",
+    "&:hover fieldset": {
+      borderColor: theme.palette.primary.main,
+    },
+  },
 }));
 
 const AddClass: React.FC = () => {
@@ -32,18 +44,22 @@ const AddClass: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [className, setClassName] = useState("");
+  const [classRoom, setClassRoom] = useState("");
 
-  const handleAddClass = async (
-    newClass: Omit<Class, "id" | "created_at" | "updated_at" | "teacher">
-  ) => {
+  const handleAddClass = async () => {
     setIsLoading(true);
     setError(null);
     try {
+      const newClass: Omit<Class, "id" | "created_at" | "updated_at"> = {
+        className: className,
+        classLocation: classRoom,
+        teacherName: user.username,
+      };
       const classToCreate = {
         ...newClass,
         teacher: user.username,
       };
-
       await classService.createClass(classToCreate);
       setSuccessMessage("授業が正常に作成されました。");
       setTimeout(() => {
@@ -61,22 +77,60 @@ const AddClass: React.FC = () => {
       <AnimatedBox>
         <StyledPaper elevation={3}>
           <Typography
-            variant="h4"
+            variant="h3"
             component="h1"
             gutterBottom
             color="primary"
             fontWeight="bold"
-            sx={{ mb: 4 }}
+            sx={{ mb: 2, textAlign: "center" }}
           >
             新しい授業を作成
           </Typography>
-          <AddClassForm
-            onAddClass={handleAddClass}
-            currentUserName={user}
-            isLoading={isLoading}
+          <Typography variant="subtitle1" sx={{ mb: 4, textAlign: "center" }}>
+            以下のフォームに必要事項を入力してください。
+          </Typography>
+          <StyledTextField
+            fullWidth
+            label="授業名"
+            variant="outlined"
+            value={className}
+            onChange={(e) => setClassName(e.target.value)}
+            required
           />
-          <Grid container justifyContent="flex-end" sx={{ mt: 4 }}>
-            <EduCancelButton />
+          <StyledTextField
+            fullWidth
+            label="教室"
+            variant="outlined"
+            value={classRoom}
+            onChange={(e) => setClassRoom(e.target.value)}
+            required
+          />
+          <Grid container spacing={2} sx={{ mt: 4 }}>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={handleAddClass}
+                disabled={isLoading}
+                sx={{ sx: 2, borderRadius: 28 }}
+              >
+                授業を追加
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                size="large"
+                sx={{ sx: 2, borderRadius: 28 }}
+                onClick={() => navigate("/eduhome")}
+              >
+                キャンセル
+              </Button>
+            </Grid>
           </Grid>
         </StyledPaper>
       </AnimatedBox>

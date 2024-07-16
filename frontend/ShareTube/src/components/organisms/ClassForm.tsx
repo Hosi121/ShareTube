@@ -39,7 +39,6 @@ const AddClassForm: React.FC<AddClassFormProps> = ({
           onChange={(e) => setClassLocation(e.target.value)}
           required
         />
-        <InputField label="担当教員" value={currentUserName} disabled />
       </Box>
       <Button
         type="submit"
