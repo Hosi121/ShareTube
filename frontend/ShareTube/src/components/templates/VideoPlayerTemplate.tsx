@@ -1,12 +1,21 @@
-import React from 'react';
-import { Container, Grid, Paper, Box, Typography, Avatar, Button, Divider } from '@mui/material';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import ShareIcon from '@mui/icons-material/Share';
-import VideoPlayer from '../molecules/VideoPlayer';
-import CommentSection from '../organisms/CommentSection';
-import { Video } from '../../types/video';
-import { VideoComment } from '../../types/comment';
-import { User } from '../../types/user';
+import React from "react";
+import {
+  Container,
+  Grid,
+  Paper,
+  Box,
+  Typography,
+  Avatar,
+  Button,
+  Divider,
+} from "@mui/material";
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import ShareIcon from "@mui/icons-material/Share";
+import VideoPlayer from "../molecules/VideoPlayer";
+import CommentSection from "../organisms/CommentSection";
+import { Video } from "../../types/video";
+import { VideoComment } from "../../types/comment";
+import { User } from "../../types/user";
 
 interface VideoPlayerTemplateProps {
   video: Video;
@@ -37,7 +46,11 @@ const VideoPlayerTemplate: React.FC<VideoPlayerTemplateProps> = ({
           <Typography variant="h5" gutterBottom>
             {video.title}
           </Typography>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Box display="flex" alignItems="center">
               <Typography variant="body2" color="textSecondary">
                 {`${video.likes} likes • ${new Date(video.created_at).toLocaleDateString()}`}
@@ -45,11 +58,9 @@ const VideoPlayerTemplate: React.FC<VideoPlayerTemplateProps> = ({
             </Box>
             <Box>
               <Button startIcon={<ThumbUpAltIcon />} onClick={onLikeVideo}>
-                Like
+                高評価
               </Button>
-              <Button startIcon={<ShareIcon />}>
-                Share
-              </Button>
+              <Button startIcon={<ShareIcon />}>シェア</Button>
             </Box>
           </Box>
         </Box>
@@ -58,7 +69,9 @@ const VideoPlayerTemplate: React.FC<VideoPlayerTemplateProps> = ({
           <Box display="flex" alignItems="center" mb={2}>
             <Avatar src={videoOwner?.avatar_url} />
             <Box ml={2}>
-              <Typography variant="subtitle1">{videoOwner?.username}</Typography>
+              <Typography variant="subtitle1">
+                {videoOwner?.username}
+              </Typography>
               <Typography variant="body2" color="textSecondary">
                 Subscribers count
               </Typography>
@@ -67,9 +80,9 @@ const VideoPlayerTemplate: React.FC<VideoPlayerTemplateProps> = ({
           <Typography variant="body1">{video.description}</Typography>
         </Box>
         <Divider />
-        <CommentSection 
-          comments={comments} 
-          onAddComment={onAddComment} 
+        <CommentSection
+          comments={comments}
+          onAddComment={onAddComment}
           currentUser={currentUser}
         />
       </Grid>
