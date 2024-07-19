@@ -1,7 +1,7 @@
 // pages/Home.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Container, Fade } from "@mui/material";
+import { Box, Container, Fade, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Typography from "../atoms/typography";
 import SearchForm from "../organisms/SearchBar";
@@ -57,6 +57,13 @@ const Home: React.FC = () => {
               variant="body1"
               sx={{ mt: 2, color: "text.secondary", textAlign: "center" }}
             ></Typography>
+            <Button
+              color="primary"
+              size="large"
+              onClick={() => navigate("/mainmenu")}
+            >
+              メインメニューに戻る
+            </Button>
           </Box>
         </Fade>
       </Container>

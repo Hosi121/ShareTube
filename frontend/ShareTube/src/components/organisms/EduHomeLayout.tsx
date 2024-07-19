@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import ClassList from "../molecules/ClassList";
 import { Class } from "../../types/class";
 import ClassData from "../../testData/ClassData.json";
+import { useNavigate } from "react-router-dom";
 
 const EduHomeLayout: React.FC = () => {
   const [classes, setClasses] = useState<Class[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     try {
@@ -42,6 +44,14 @@ const EduHomeLayout: React.FC = () => {
         授業一覧
       </Typography>
       <ClassList classes={classes} onClassSelect={handleClassSelect} />
+      <Button
+        size="large"
+        color="primary"
+        onClick={() => navigate("/mainmenu")}
+        sx={{ mt: 2 }}
+      >
+        メインメニューに戻る
+      </Button>
     </Box>
   );
 };

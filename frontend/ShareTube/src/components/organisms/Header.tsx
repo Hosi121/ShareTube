@@ -71,7 +71,11 @@ const Header: React.FC<NavigationProps> = ({ currentUser }) => {
           <VideoUploadButton sx={{ height: "36px" }} />
         </ListItem>
         {currentUser ? (
-          <ListItem button component={Link} to={`/user/${currentUser.username}`}>
+          <ListItem
+            button
+            component={Link}
+            to={`/user/${currentUser.username}`}
+          >
             <ListItemText primary="My Profile" />
           </ListItem>
         ) : (
@@ -107,7 +111,7 @@ const Header: React.FC<NavigationProps> = ({ currentUser }) => {
               <MenuIcon />
             </IconButton>
           )}
-          <LogoLink to="/">
+          <LogoLink to="/home">
             <Typography
               color="#3f51b5"
               variant="h4"
