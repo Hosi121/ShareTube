@@ -22,7 +22,7 @@ const EduHeader: React.FC<HeaderProps> = ({ currentUser }) => {
               display: "flex",
               alignItems: "center",
             }}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/eduhome")}
           >
             <Typography
               variant="h4"
