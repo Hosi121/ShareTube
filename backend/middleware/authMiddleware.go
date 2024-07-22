@@ -5,7 +5,7 @@ import (
     "strings"
 
     "github.com/gin-gonic/gin"
-    "backend/utils"
+    "backend/auth"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -18,7 +18,7 @@ func AuthMiddleware() gin.HandlerFunc {
         }
 
         tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-        claims, err := utils.VerifyJWT(tokenString)
+        claims, err := auth.VerifyJWT(tokenString)
         if err != nil {
             c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
             c.Abort()
