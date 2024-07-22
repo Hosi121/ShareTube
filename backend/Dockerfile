@@ -1,7 +1,7 @@
 # backend/Dockerfile
 
 # 1. ベースイメージを最新バージョンで指定
-FROM golang:latest
+FROM golang:latest AS builder
 
 # 2. 作業ディレクトリを設定
 WORKDIR /app
@@ -14,10 +14,18 @@ RUN go mod download
 COPY . .
 
 # 5. アプリケーションをビルド
-RUN go build -o main .
+RUN GOOS=linux go build -o main . 
 
-# 6. アプリケーションを起動
-CMD ["./main"]
+# 6. 軽量なAlpine Linuxイメージをベースイメージとして指定
+FROM alpine:latest
 
-# 7. 必要なポートを公開
+WORKDIR /app
+
+# 7. builder stageで生成したGoのバイナリファイルをApline Linuxのイメージにコピー
+COPY --from=builder /app/main /app/main
+
+# 8. 必要なポートを公開
 EXPOSE 8080
+
+# 9. アプリケーションを起動
+CMD ["./main"]
