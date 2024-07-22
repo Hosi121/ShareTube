@@ -6,14 +6,14 @@ import (
     "testing"
 
     "github.com/gin-gonic/gin"
-    "backend/utils"
+    "backend/auth"
 )
 
 func TestAuthMiddleware(t *testing.T) {
     gin.SetMode(gin.TestMode)
 
     // ユーザーIDを1とするトークンを生成
-    tokenString, err := utils.GenerateJWT(1)
+    tokenString, err := auth.GenerateJWT(1)
     if err != nil {
         t.Fatalf("Failed to generate JWT: %v", err)
     }
