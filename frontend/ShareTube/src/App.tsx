@@ -17,6 +17,7 @@ import { getProfileByUsername } from "./services/authService";
 import { User } from "./types/user";
 import Upload from "./components/pages/Upload";
 import VideoPlay from "./components/pages/VideoPlay";
+import TestVideoPlay from "./components/pages/TestVideoPlay";
 import { MainLayout } from "./components/molecules/MainLayout";
 import LoadingScreen from "./components/organisms/LoadingScreen";
 import SplashScreen from "./components/organisms/SplashScreen";
@@ -100,7 +101,7 @@ const App: React.FC = () => {
                 <Header currentUser={currentUser} />
                 <Routes>
                   <Route path="/user/:username" element={<Profile />} />
-                  <Route path="/play/:videoId" element={<VideoPlay />} />
+                  <Route path="/play/:videoId" element={<TestVideoPlay />} />
                   <Route path="/search" element={<SearchResults />} />
                   <Route
                     path="/"
