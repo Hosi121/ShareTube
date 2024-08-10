@@ -2,7 +2,7 @@ package models
 
 import (
 	"errors"
-	"log"
+	"log/slog"
 	"time"
 
 	"gorm.io/gorm"
@@ -44,12 +44,9 @@ func LikeComment(commentID uint) (int, error) {
 	var comment Comment
 	if err := DB.First(&comment, commentID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			// 4xx系のエラー
-			// レコードがない場合のエラーハンドリング
-			// Ref: https://gorm.io/ja_JP/docs/error_handling.html#ErrRecordNotFound
-			log.Println("Record not found")
+			// Log warning for 4xx client error when record is not found
+			slog.Warn("Record not found (4xx client error)", "commentID", commentID)
 		}
-		// 5xx系のエラー
 		return 0, err
 	}
 	comment.Likes++
