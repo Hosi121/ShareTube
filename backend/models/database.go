@@ -2,7 +2,7 @@ package models
 
 import (
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 
 	"gorm.io/driver/mysql"
@@ -26,20 +26,34 @@ func ConnectDatabase() {
 		os.Getenv("DB_NAME"),
 	)
 
-	log.Printf("Connecting to database with DSN: %s", dsn) // デバッグ用のログ出力
+	slog.Info("Connecting to database", "dsn", dsn) // デバッグ用のログ出力
 
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Could not connect to the database: %v", err)
+		// 5xx系のサーバーエラー: データベース接続に失敗した場合
+		slog.Error("Could not connect to the database", "error", err)
+		os.Exit(1)
 	}
 
 	// Create tables
-	DB.AutoMigrate(&User{}, &Class{}, &Video{}, &Comment{}, &VideoTag{}, &Tag{})
+	if err := DB.AutoMigrate(&User{}, &Class{}, &Video{}, &Comment{}, &VideoTag{}, &Tag{}); err != nil {
+		// 5xx系のサーバーエラー: データベースマイグレーションに失敗した場合
+		slog.Error("Could not migrate database", "error", err)
+		os.Exit(1)
+	}
 }
 
 // ResetDatabase resets the database by dropping and recreating it
 func ResetDatabase() {
-	DB.Exec("DROP DATABASE IF EXISTS test_video_sns")
-	DB.Exec("CREATE DATABASE test_video_sns")
+	if err := DB.Exec("DROP DATABASE IF EXISTS test_video_sns").Error; err != nil {
+		// 5xx系のサーバーエラー: データベース削除に失敗した場合
+		slog.Error("Failed to drop database", "error", err)
+		return
+	}
+	if err := DB.Exec("CREATE DATABASE test_video_sns").Error; err != nil {
+		// 5xx系のサーバーエラー: データベース作成に失敗した場合
+		slog.Error("Failed to create database", "error", err)
+		return
+	}
 	ConnectDatabase()
 }
