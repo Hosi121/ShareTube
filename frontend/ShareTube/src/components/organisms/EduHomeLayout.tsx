@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import ClassList from "../molecules/ClassList";
+import ClassList from "./ClassList";
 import { Class } from "../../types/class";
 import ClassData from "../../testData/ClassData.json";
 import { useNavigate } from "react-router-dom";

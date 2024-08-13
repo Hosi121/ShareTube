@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import ClassCard from "./ClassCard";
+import ClassCard from "../molecules/ClassCard";
 import { Class } from "../../types/class";
 
 interface ClassListProps {
