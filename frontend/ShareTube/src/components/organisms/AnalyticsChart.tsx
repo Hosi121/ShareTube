@@ -1,6 +1,6 @@
 import React from "react";
 import { Paper, Tabs, Tab, Box } from "@mui/material";
-import Chart from "../molecules/Chart";
+import Chart from "./Chart";
 import { VideoAnalytics } from "../../types/video";
 
 interface TabPanelProps {
@@ -28,7 +28,9 @@ interface AnalyticsChartsProps {
   videoAnalytics: VideoAnalytics[];
 }
 
-const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({ videoAnalytics }) => {
+const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
+  videoAnalytics,
+}) => {
   const [tabValue, setTabValue] = React.useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, Grid, Typography } from "@mui/material";
 import useUserData from "../../hooks/useUserData";
-import UserInfoCard from "../molecules/UserInfoCard";
+import UserInfoCard from "../organisms/UserInfoCard";
 import VideoList from "../organisms/VideoList";
-import EditProfileModal from "../molecules/EditProfileModal";
-import SettingsModal from "../molecules/SettingsModal";
+import EditProfileModal from "../organisms/EditProfileModal";
+import SettingsModal from "../organisms/SettingsModal";
 
 const Profile: React.FC = () => {
   const { user, isLoading, error, updateUser } = useUserData();
