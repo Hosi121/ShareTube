@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import ClassCard from "../molecules/ClassCard";
 import { Class } from "../../types/class";
 
 interface ClassListProps {
   classes: Class[];
-  onClassSelect: (classId: string) => void;
+  onClassSelect: (classId: string) => void;  // ここでonClassSelectを定義
 }
 
 const ClassList: React.FC<ClassListProps> = ({ classes, onClassSelect }) => {
@@ -17,7 +17,7 @@ const ClassList: React.FC<ClassListProps> = ({ classes, onClassSelect }) => {
             className={cls.className}
             teacherName={cls.teacherName}
             classLocation={cls.classLocation}
-            onClick={() => onClassSelect(cls.id.toString())}
+            onClick={() => onClassSelect(cls.id.toString())}  // onClickでonClassSelectを呼び出し
           />
         </Grid>
       ))}

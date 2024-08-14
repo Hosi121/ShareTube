@@ -8,4 +8,3 @@ class Video:
         self.likes = likes
         self.created_at = created_at
         self.tags = tags
-
