@@ -63,7 +63,7 @@ const CreateClass: React.FC = () => {
       const newClass: Omit<Class, "id" | "created_at" | "updated_at"> = {
         className: className,
         classLocation: classRoom,
-        teacherName: "teacher",
+        teacherName: localStorage.getItem("username") || "",
       };
       await classService.createClass(newClass);
       setSuccessMessage("授業が正常に作成されました。");

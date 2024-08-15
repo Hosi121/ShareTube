@@ -4,20 +4,19 @@ import InputField from "../atoms/TextField";
 import Button from "../atoms/Button";
 import { Class } from "../../types/class";
 
-interface AddClassFormProps {
+interface ClassFormProps {
   onAddClass: (
     newClass: Omit<Class, "id" | "created_at" | "updated_at" | "teacher">
   ) => void;
-  currentUserName: string;
   isLoading: boolean;
 }
 
-const AddClassForm: React.FC<AddClassFormProps> = ({
-  onAddClass,
-  currentUserName,
-}) => {
-  const [className, setclassName] = useState("");
+const ClassForm: React.FC<ClassFormProps> = ({ onAddClass }) => {
+  const [className, setClassName] = useState("");
   const [classLocation, setClassLocation] = useState("");
+
+  // localStorageからusernameを取得
+  const currentUserName = localStorage.getItem("username") || "";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +29,7 @@ const AddClassForm: React.FC<AddClassFormProps> = ({
         <InputField
           label="授業名"
           value={className}
-          onChange={(e) => setclassName(e.target.value)}
+          onChange={(e) => setClassName(e.target.value)}
           required
         />
         <InputField
@@ -39,17 +38,17 @@ const AddClassForm: React.FC<AddClassFormProps> = ({
           onChange={(e) => setClassLocation(e.target.value)}
           required
         />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2, borderRadius: 28 }}
+        >
+          授業を追加
+        </Button>
       </Box>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        sx={{ mt: 2, borderRadius: 28 }}
-      >
-        授業を追加
-      </Button>
     </Box>
   );
 };
 
-export default AddClassForm;
+export default ClassForm;
