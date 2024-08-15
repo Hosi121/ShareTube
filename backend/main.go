@@ -34,8 +34,8 @@ func main() {
 	routes.CommentRoutes(r)
 	routes.VideoUploadRoutes(r)
 	routes.VideoRoutes(r)
-	routes.ClassRoutes(r)
-	routes.RegisterRoutes(r)
+	routes.RegisterClassRoutes(r)
+	routes.GetAllClassesRoutes(r)
 
 	// ポートを指定してサーバーを起動
 	port := os.Getenv("PORT")

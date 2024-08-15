@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ClassRoutes(r *gin.Engine) {
+func RegisterClassRoutes(r *gin.Engine) {
 	r.POST("/class", controllers.RegisterClass)
 }
 
-func RegisterRoutes(r *gin.Engine) {
+func GetAllClassesRoutes(r *gin.Engine) {
 	r.GET("/classes", controllers.GetAllClasses)
 }
