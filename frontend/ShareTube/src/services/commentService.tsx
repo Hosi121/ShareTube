@@ -1,5 +1,3 @@
-// src/api/comments.ts
-
 import api from "./api";
 import { VideoComment, PostCommentInput } from "../types/comment";
 
