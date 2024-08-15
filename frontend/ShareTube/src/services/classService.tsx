@@ -13,4 +13,15 @@ export const classService = {
       throw error;
     }
   },
+
+  getClasses: async (): Promise<Class[]> => {
+    try {
+      const response = await api.get(`/classes`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      throw error;
+    }
+  },
+
 };

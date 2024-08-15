@@ -1,10 +1,15 @@
 package routes
 
 import (
-    "github.com/gin-gonic/gin"
-    "backend/controllers"
+	"backend/controllers"
+
+	"github.com/gin-gonic/gin"
 )
 
-func ClassRoutes(r *gin.Engine) {
-    r.POST("/class", controllers.RegisterClass)
+func RegisterClassRoutes(r *gin.Engine) {
+	r.POST("/class", controllers.RegisterClass)
+}
+
+func GetAllClassesRoutes(r *gin.Engine) {
+	r.GET("/classes", controllers.GetAllClasses)
 }
