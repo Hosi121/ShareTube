@@ -28,6 +28,7 @@ import EduHeader from "./components/organisms/EduHeader";
 import CreateClass from "./components/pages/CreateClassPage";
 import ClassAnalytics from "./components/pages/AnalyticsPage";
 import Header from "./components/organisms/Header";
+import ClassHome from "./components/pages/ClassHome";
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -90,6 +91,7 @@ const App: React.FC = () => {
                     path="class/:classId/analytics"
                     element={<ClassAnalytics />}
                   />
+                  <Route path="class/:classId/home" element={<ClassHome />} />
                 </Routes>
               </>
             }
