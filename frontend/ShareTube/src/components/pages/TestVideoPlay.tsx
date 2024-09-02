@@ -1,105 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import VideoPlayerTemplate from "../templates/VideoPlayerTemplate";
-import { fetchVideoDetails, likeVideo } from "../../services/videoService";
-import { createComment } from "../../services/commentService";
+import { fetchVideoDetails, likeVideo } from "../../services/videoService"; // These should also be moved to a Redux slice
 import { VideoDetails, Video } from "../../types/video";
-import { PostCommentInput, VideoComment } from "../../types/comment";
-import { User } from "../../types/user";
-import { getProfileByUsername } from "../../services/authService";
-import mockData from "../../testData/VideoData.json";
+import { VideoComment } from "../../types/comment";
+import { RootState } from "../../store";
+import { getProfileByUsername as getProfileByUsernameThunk } from "../../store/authSlice";
 
 const VideoPlayerPage: React.FC = () => {
   const { videoId } = useParams<{ videoId: string }>();
-  const [videoDetails, setVideoDetails] = useState<VideoDetails | null>(null);
-  const [videoOwner, setVideoOwner] = useState<User | null>(null);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [useMockData, setUseMockData] = useState(true);
+  const dispatch = useDispatch();
+
+  // Accessing Redux state
+  const videoDetails = useSelector((state: RootState) => state.video.videoDetails);
+  const videoOwner = useSelector((state: RootState) => state.video.videoOwner);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
-    const loadVideoDetails = async () => {
-      if (videoId) {
-        try {
-          if (useMockData) {
-            const mockVideo: Video = {
-              ...mockData.video,
-              created_at: new Date(mockData.video.created_at),
-            };
-            const mockComments: VideoComment[] = mockData.comments.map(
-              (comment) => ({
-                ...comment,
-                timestamp: new Date(comment.timestamp),
-                user: comment.user as User,
-              })
-            );
-            setVideoDetails({
-              video: mockVideo,
-              comments: mockComments,
-            });
-            setVideoOwner(mockData.videoOwner as User);
-          } else {
-            const details = await fetchVideoDetails(videoId);
-            setVideoDetails(details);
-          }
-        } catch (error) {
-          console.error("Error loading video details:", error);
-        }
-      }
-    };
+    if (videoId) {
+      dispatch(fetchVideoDetails(videoId)); // This should be a Redux action, create a slice for `video`
+    }
 
-    const loadCurrentUser = async () => {
-      if (useMockData) {
-        setCurrentUser(mockData.currentUser as User);
-      } else {
-        const username = localStorage.getItem("username");
-        if (username) {
-          try {
-            const user = await getProfileByUsername(username);
-            setCurrentUser(user);
-          } catch (error) {
-            console.error("Error loading current user:", error);
-          }
-        }
+    if (!currentUser) {
+      const username = localStorage.getItem("username");
+      if (username) {
+        dispatch(getProfileByUsernameThunk(username));
       }
-    };
-
-    loadVideoDetails();
-    loadCurrentUser();
-  }, [videoId, useMockData]);
+    }
+  }, [videoId, dispatch, currentUser]);
 
   const handleAddComment = async (comment: string) => {
     if (videoId && videoDetails && currentUser) {
       try {
-        if (useMockData) {
-          const newComment: VideoComment = {
-            id: Date.now(),
-            video_id: parseInt(videoId, 10),
-            user_id: currentUser.id,
-            comment: comment,
-            timestamp: new Date(),
-            user: currentUser,
-          };
-          setVideoDetails((prevDetails) => {
-            if (prevDetails === null) return null;
-            return {
-              ...prevDetails,
-              comments: [...prevDetails.comments, newComment],
-            };
-          });
-        } else {
-          const commentInput: PostCommentInput = {
-            video_id: parseInt(videoId, 10),
-            comment: comment,
-          };
-          const newComment = await createComment(commentInput);
-          setVideoDetails((prevDetails) => {
-            if (prevDetails === null) return null;
-            return {
-              ...prevDetails,
-              comments: [...prevDetails.comments, newComment],
-            };
-          });
-        }
+        const commentInput: PostCommentInput = {
+          video_id: parseInt(videoId, 10),
+          comment: comment,
+        };
+
+        // Dispatch a Redux action to add a comment
+        dispatch(addComment(commentInput)); // This action needs to be created in your `videoSlice`
       } catch (error) {
         console.error("Error adding comment:", error);
       }
@@ -109,31 +49,7 @@ const VideoPlayerPage: React.FC = () => {
   const handleLikeVideo = async () => {
     if (videoId && videoDetails) {
       try {
-        if (useMockData) {
-          // モックデータでいいねを追加
-          setVideoDetails((prevDetails) => {
-            if (prevDetails === null) return null;
-            return {
-              ...prevDetails,
-              video: {
-                ...prevDetails.video,
-                likes: prevDetails.video.likes + 1,
-              },
-            };
-          });
-        } else {
-          const updatedLikes = await likeVideo(videoId);
-          setVideoDetails((prevDetails) => {
-            if (prevDetails === null) return null;
-            return {
-              ...prevDetails,
-              video: {
-                ...prevDetails.video,
-                likes: updatedLikes,
-              },
-            };
-          });
-        }
+        dispatch(likeVideo(videoId)); // Again, this should be a Redux action
       } catch (error) {
         console.error("Error liking video:", error);
       }
