@@ -7,6 +7,8 @@ import {
   Outlet,
 } from "react-router-dom";
 import theme from "./theme";
+import { Provider } from "react-redux";
+import { store } from "./store";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Register from "./components/auth/Register";
@@ -68,6 +70,7 @@ const App: React.FC = () => {
   }
 
   return (
+    <Provider store={store}>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
@@ -118,6 +121,7 @@ const App: React.FC = () => {
         </Routes>
       </Router>
     </ThemeProvider>
+    </Provider>
   );
 };
 
