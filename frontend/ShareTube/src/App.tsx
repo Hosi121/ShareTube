@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
-import {
-  Route,
-  Routes,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
+import React from "react";
+import { useEffect, useState } from "react";
+import { Route, Routes, Navigate, Outlet } from "react-router-dom";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/pages/Profile";
@@ -24,6 +20,7 @@ import Header from "./components/organisms/Header";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import ClassHome from "./components/pages/ClassHome";
+import PrivateRoute from "./componenets/pages/PrivateRoute";
 
 const App: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
@@ -53,22 +50,31 @@ const App: React.FC = () => {
       <Route path="/mainmenu" element={<MainMenu />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/upload" element={<Upload />} />
+      <Route
+        path="/upload"
+        element={
+          <PrivateRoute>
+            <Upload />
+          </PrivateRoute>
+        }
+      />
       <Route
         path="/eduhome/*"
         element={
-          <>
-            <EduHeader currentUser={currentUser} />
-            <Routes>
-              <Route path="/" element={<EduHome />} />
-              <Route path="createclass" element={<CreateClass />} />
-              <Route
-                path="class/:classId/analytics"
-                element={<ClassAnalytics />}
-              />
-              <Route path="class/:classId/home" element={<ClassHome />} />
-            </Routes>
-          </>
+          <PrivateRoute>
+            <>
+              <EduHeader currentUser={currentUser} />
+              <Routes>
+                <Route path="/" element={<EduHome />} />
+                <Route path="createclass" element={<CreateClass />} />
+                <Route
+                  path="class/:classId/analytics"
+                  element={<ClassAnalytics />}
+                />
+                <Route path="class/:classId/home" element={<ClassHome />} />
+              </Routes>
+            </>
+          </PrivateRoute>
         }
       />
       <Route
@@ -77,9 +83,30 @@ const App: React.FC = () => {
           <>
             <Header currentUser={currentUser} />
             <Routes>
-              <Route path="/user/:username" element={<Profile />} />
-              <Route path="/play/:videoId" element={<TestVideoPlay />} />
-              <Route path="/search" element={<SearchResults />} />
+              <Route
+                path="/user/:username"
+                element={
+                  <PrivateRoute>
+                    <Profile />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/play/:videoId"
+                element={
+                  <PrivateRoute>
+                    <TestVideoPlay />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/search"
+                element={
+                  <PrivateRoute>
+                    <SearchResults />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path="/"
                 element={
