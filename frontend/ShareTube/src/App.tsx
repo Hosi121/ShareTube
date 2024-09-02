@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import theme from "./theme";
-import { Provider } from "react-redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 import { store } from "./store";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,8 +15,6 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Profile from "./components/pages/Profile";
 import Home from "./components/pages/Home";
-import { getProfileByUsername } from "./services/authService";
-import { User } from "./types/user";
 import Upload from "./components/pages/Upload";
 import VideoPlay from "./components/pages/VideoPlay";
 import TestVideoPlay from "./components/pages/TestVideoPlay";
@@ -30,39 +28,19 @@ import EduHeader from "./components/organisms/EduHeader";
 import CreateClass from "./components/pages/CreateClassPage";
 import ClassAnalytics from "./components/pages/AnalyticsPage";
 import Header from "./components/organisms/Header";
+import { RootState } from "./store";
 
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const loading = useSelector((state: RootState) => state.auth.status === 'loading');
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
-    const username = localStorage.getItem("username");
-    if (username) {
-      const fetchCurrentUser = async () => {
-        try {
-          const user = await getProfileByUsername(username);
-          setCurrentUser(user);
-        } catch (error) {
-          console.error("Failed to fetch current user", error);
-        } finally {
-          setLoading(false);
-          setShowSplash(false);
-        }
-      };
-      fetchCurrentUser();
-    } else {
-      setLoading(false);
-      setShowSplash(false);
-    }
+    setTimeout(() => setShowSplash(false), 3000); // 3秒のスプラッシュスクリーンを表示
   }, []);
 
-  const handleLoadingComplete = () => {
-    setLoading(false);
-  };
-
   if (showSplash) {
-    return <SplashScreen onLoadingComplete={handleLoadingComplete} />;
+    return <SplashScreen />;
   }
 
   if (loading) {
@@ -71,56 +49,56 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<Navigate to="/mainmenu" />} />
-          <Route path="/mainmenu" element={<MainMenu />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route
-            path="/eduhome/*"
-            element={
-              <>
-                <EduHeader currentUser={currentUser} />
-                <Routes>
-                  <Route path="/" element={<EduHome />} />
-                  <Route path="createclass" element={<CreateClass />} />
-                  <Route
-                    path="class/:classId/analytics"
-                    element={<ClassAnalytics />}
-                  />
-                </Routes>
-              </>
-            }
-          />
-          <Route
-            path="/*"
-            element={
-              <>
-                <Header currentUser={currentUser} />
-                <Routes>
-                  <Route path="/user/:username" element={<Profile />} />
-                  <Route path="/play/:videoId" element={<TestVideoPlay />} />
-                  <Route path="/search" element={<SearchResults />} />
-                  <Route
-                    path="/"
-                    element={
-                      <MainLayout currentUser={currentUser}>
-                        <Outlet />
-                      </MainLayout>
-                    }
-                  ></Route>
-                </Routes>
-              </>
-            }
-          />
-        </Routes>
-      </Router>
-    </ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Navigate to="/mainmenu" />} />
+            <Route path="/mainmenu" element={<MainMenu />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route
+              path="/eduhome/*"
+              element={
+                <>
+                  <EduHeader currentUser={currentUser} />
+                  <Routes>
+                    <Route path="/" element={<EduHome />} />
+                    <Route path="createclass" element={<CreateClass />} />
+                    <Route
+                      path="class/:classId/analytics"
+                      element={<ClassAnalytics />}
+                    />
+                  </Routes>
+                </>
+              }
+            />
+            <Route
+              path="/*"
+              element={
+                <>
+                  <Header currentUser={currentUser} />
+                  <Routes>
+                    <Route path="/user/:username" element={<Profile />} />
+                    <Route path="/play/:videoId" element={<TestVideoPlay />} />
+                    <Route path="/search" element={<SearchResults />} />
+                    <Route
+                      path="/"
+                      element={
+                        <MainLayout currentUser={currentUser}>
+                          <Outlet />
+                        </MainLayout>
+                      }
+                    ></Route>
+                  </Routes>
+                </>
+              }
+            />
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </Provider>
   );
 };
