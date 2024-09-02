@@ -23,6 +23,7 @@ import ClassAnalytics from "./components/pages/AnalyticsPage";
 import Header from "./components/organisms/Header";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
+import ClassHome from "./components/pages/ClassHome";
 
 const App: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
@@ -65,6 +66,7 @@ const App: React.FC = () => {
                 path="class/:classId/analytics"
                 element={<ClassAnalytics />}
               />
+              <Route path="class/:classId/home" element={<ClassHome />} />
             </Routes>
           </>
         }

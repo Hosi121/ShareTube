@@ -1,63 +1,72 @@
 {
-    "classId": "class123",
-    "className": "プログラミング入門",
-    "totalViews": 3500,
-    "averageRetentionRate": 78,
-    "videos": [
-      {
-        "videoId": "v1",
-        "title": "変数と定数",
-        "views": 750,
-        "averageViewDuration": 1620,
-        "totalDuration": 1800,
-        "retentionRate": 85,
-        "engagementRate": 72,
-        "likes": 120,
-        "comments": 45
-      },
-      {
-        "videoId": "v2",
-        "title": "条件分岐",
-        "views": 680,
-        "averageViewDuration": 1500,
-        "totalDuration": 1800,
-        "retentionRate": 80,
-        "engagementRate": 68,
-        "likes": 95,
-        "comments": 38
-      },
-      {
-        "videoId": "v3",
-        "title": "ループ処理",
-        "views": 620,
-        "averageViewDuration": 1380,
-        "totalDuration": 1800,
-        "retentionRate": 75,
-        "engagementRate": 65,
-        "likes": 85,
-        "comments": 30
-      },
-      {
-        "videoId": "v4",
-        "title": "関数",
-        "views": 590,
-        "averageViewDuration": 1440,
-        "totalDuration": 1800,
-        "retentionRate": 78,
-        "engagementRate": 70,
-        "likes": 100,
-        "comments": 42
-      },
-      {
-        "videoId": "v5",
-        "title": "クラスとオブジェクト",
-        "views": 540,
-        "averageViewDuration": 1560,
-        "totalDuration": 1800,
-        "retentionRate": 72,
-        "engagementRate": 62,
-        "likes": 75,
-        "comments": 28
-      }
-    ]
-  }
+  "class": {
+    "id": "class123",
+    "className": "モックデータ"
+  },
+  "videos": [
+    {
+      "id": 1,
+      "user_id": 101,
+      "title": "変数と定数の基礎",
+      "description": "プログラミングにおける変数と定数の概念と使い方について解説します。",
+      "video_url": "https://example.com/videos/variables-and-constants.mp4",
+      "likes": 45,
+      "created_at": "2023-08-15T10:30:00Z",
+      "tags": [
+        { "id": 1, "name": "変数" },
+        { "id": 2, "name": "定数" }
+      ]
+    },
+    {
+      "id": 2,
+      "user_id": 102,
+      "title": "制御構文：if文とswitch文",
+      "description": "条件分岐を実現するif文とswitch文の使い方を学びます。",
+      "video_url": "https://example.com/videos/control-structures.mp4",
+      "likes": 38,
+      "created_at": "2023-08-17T14:45:00Z",
+      "tags": [
+        { "id": 3, "name": "制御構文" },
+        { "id": 4, "name": "条件分岐" }
+      ]
+    },
+    {
+      "id": 3,
+      "user_id": 101,
+      "title": "ループ処理：for文とwhile文",
+      "description": "繰り返し処理を行うfor文とwhile文について詳しく解説します。",
+      "video_url": "https://example.com/videos/loops.mp4",
+      "likes": 52,
+      "created_at": "2023-08-20T09:15:00Z",
+      "tags": [
+        { "id": 5, "name": "ループ" },
+        { "id": 6, "name": "繰り返し処理" }
+      ]
+    },
+    {
+      "id": 4,
+      "user_id": 103,
+      "title": "関数の定義と呼び出し",
+      "description": "関数の基本的な概念、定義方法、呼び出し方を学びます。",
+      "video_url": "https://example.com/videos/functions.mp4",
+      "likes": 41,
+      "created_at": "2023-08-22T16:00:00Z",
+      "tags": [
+        { "id": 7, "name": "関数" }
+      ]
+    },
+    {
+      "id": 5,
+      "user_id": 102,
+      "title": "オブジェクト指向プログラミング入門",
+      "description": "クラスとオブジェクトの基本概念について解説します。",
+      "video_url": "https://example.com/videos/oop-basics.mp4",
+      "likes": 60,
+      "created_at": "2023-08-25T11:30:00Z",
+      "tags": [
+        { "id": 8, "name": "オブジェクト指向" },
+        { "id": 9, "name": "クラス" }
+      ]
+    }
+  ]
+}
