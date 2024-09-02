@@ -20,7 +20,7 @@ import Header from "./components/organisms/Header";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import ClassHome from "./components/pages/ClassHome";
-import PrivateRoute from "./componenets/pages/PrivateRoute";
+import PrivateRoute from "./components/pages/PrivateRoute";
 
 const App: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
