@@ -1,31 +1,26 @@
 package main
 
 import (
+	"backend/config"
 	"backend/middleware"
 	"backend/models"
 	"backend/routes"
 	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	// 環境変数をロード
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// 環境設定をロード
+	cfg := config.LoadConfig()
 
 	r := gin.Default()
 
 	// CORS ミドルウェアを適用
 	r.Use(middleware.CORSMiddleware())
 
-	models.ConnectDatabase()
-
 	// データベース接続を設定
+	models.ConnectDatabase()
 	models.SetDatabase(models.DB)
 
 	// ルートを設定
@@ -38,9 +33,6 @@ func main() {
 	routes.GetAllClassesRoutes(r)
 
 	// ポートを指定してサーバーを起動
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8081"
-	}
-	r.Run(":" + port)
+	log.Printf("Server is running on port %s", cfg.Port)
+	r.Run(":" + cfg.Port)
 }
