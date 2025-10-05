@@ -2,12 +2,15 @@ package controllers
 
 import (
     "backend/models"
+    "crypto/rand"
+    "encoding/hex"
     "github.com/gin-gonic/gin"
+    "log"
     "net/http"
     "os"
     "path/filepath"
+    "strings"
     "time"
-    "log"
 )
 
 // UploadVideo handles the video upload process
@@ -35,9 +38,9 @@ func UploadVideo(c *gin.Context) {
     }
     log.Println("File size validation passed")
 
-    // ファイル形式バリデーション
+    // ファイル形式バリデーション（拡張子検証を小文字で）
     allowedExtensions := []string{".mp4", ".avi", ".mov"}
-    fileExtension := filepath.Ext(file.Filename)
+    fileExtension := strings.ToLower(filepath.Ext(file.Filename))
     isAllowed := false
     for _, ext := range allowedExtensions {
         if fileExtension == ext {
@@ -58,11 +61,24 @@ func UploadVideo(c *gin.Context) {
     }
 
     if _, err := os.Stat(saveDir); os.IsNotExist(err) {
-        os.Mkdir(saveDir, os.ModePerm)
+        // より制限的なパーミッションでディレクトリ作成
+        if err := os.MkdirAll(saveDir, 0o750); err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to prepare upload directory"})
+            return
+        }
     }
     log.Println("Directory setup completed")
 
-    filePath := filepath.Join(saveDir, file.Filename)
+    // 安全な一意のファイル名を生成
+    // 元のファイル名は保存に使用しない（パストラバーサル対策）
+    randBytes := make([]byte, 16)
+    if _, err := rand.Read(randBytes); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to generate filename"})
+        return
+    }
+    safeName := hex.EncodeToString(randBytes) + fileExtension
+
+    filePath := filepath.Join(saveDir, safeName)
     if err := c.SaveUploadedFile(file, filePath); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
@@ -70,8 +86,12 @@ func UploadVideo(c *gin.Context) {
     log.Println("File saved to disk")
 
     // コンテキストからユーザーIDを取得
-    // テスト用にユーザーIDをハードコード
-    userID := uint(1)
+    userID := c.GetUint("user_id")
+    if userID == 0 {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+        // 後続のDB保存前なのでファイル削除は不要
+        return
+    }
     log.Printf("User ID: %d", userID)
 
     // データベースに動画情報を保存
@@ -88,6 +108,8 @@ func UploadVideo(c *gin.Context) {
 
     if err := models.DB.Create(&video).Error; err != nil {
         log.Printf("Error creating video record: %v", err)
+        // DB保存に失敗した場合、ディスクのファイルをクリーンアップ
+        _ = os.Remove(filePath)
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
