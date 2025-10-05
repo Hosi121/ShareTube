@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import json
+import os
 from services.embedding_service import create_embedding
 from services.vector_db_service import save_to_vector_db
 
@@ -42,4 +43,5 @@ def upload():
     return jsonify({'message': 'Video uploaded successfully'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    debug_flag = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    app.run(debug=debug_flag)
