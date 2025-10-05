@@ -14,7 +14,7 @@
 
 ```
 cd frontend/ShareTube
-npm intstall
+npm install
 npm run dev
 ```
 
