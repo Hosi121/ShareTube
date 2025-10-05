@@ -5,6 +5,6 @@ import (
     "backend/controllers"
 )
 
-func ProfileRoutes(router *gin.Engine) {
-    router.GET("/profile/:username", controllers.GetProfileByUsername)
+func ProfileRoutes(router *gin.Engine, pc *controllers.ProfileController) {
+    router.GET("/profile/:username", pc.GetProfileByUsername)
 }

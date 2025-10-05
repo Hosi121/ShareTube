@@ -5,8 +5,8 @@ import (
     "backend/controllers"
 )
 
-func AuthRoutes(r *gin.Engine) {
-    r.POST("/register", controllers.Register)
-    r.POST("/login", controllers.Login)
-    r.POST("/logout", controllers.Logout)
+func AuthRoutes(r *gin.Engine, auth *controllers.AuthController) {
+    r.POST("/register", auth.Register)
+    r.POST("/login", auth.Login)
+    r.POST("/logout", auth.Logout)
 }

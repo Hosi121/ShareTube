@@ -5,7 +5,7 @@ import (
     "backend/controllers"
 )
 
-func VideoRoutes(router *gin.Engine) {
-    router.GET("/videos/:id", controllers.GetVideo)
+func VideoRoutes(router *gin.Engine, vc *controllers.VideoController) {
+    router.GET("/videos/:id", vc.GetVideo)
+    router.GET("/videos/search", vc.Search)
 }
-

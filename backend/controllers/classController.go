@@ -1,37 +1,29 @@
 package controllers
 
 import (
-	"backend/models"
-	"net/http"
+    "context"
+    "net/http"
 
-	"github.com/gin-gonic/gin"
+    "backend/models"
+    "backend/services"
+    "github.com/gin-gonic/gin"
 )
 
-// RegisterClass handles the creation of a new class
-func RegisterClass(c *gin.Context) {
-	var newClass models.Class
+type ClassController struct { svc services.ClassService }
 
-	// Bind the JSON body to newClass
-	if err := c.ShouldBindJSON(&newClass); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+func NewClassController(s services.ClassService) *ClassController { return &ClassController{svc: s} }
 
-	// Create the class in the database
-	if err := models.CreateClass(&newClass); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusCreated, newClass)
+// POST /class
+func (cc *ClassController) RegisterClass(c *gin.Context) {
+    var in models.Class
+    if err := c.ShouldBindJSON(&in); err != nil { c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()}); return }
+    if err := cc.svc.Register(context.Background(), &in); err != nil { c.Error(err); return }
+    c.JSON(http.StatusCreated, in)
 }
 
-// GetAllClasses retrieves all classes from the database
-func GetAllClasses(c *gin.Context) {
-	var classes []models.Class
-	if err := models.DB.Find(&classes).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, classes)
+// GET /classes
+func (cc *ClassController) GetAllClasses(c *gin.Context) {
+    classes, err := cc.svc.ListAll(context.Background())
+    if err != nil { c.Error(err); return }
+    c.JSON(http.StatusOK, classes)
 }

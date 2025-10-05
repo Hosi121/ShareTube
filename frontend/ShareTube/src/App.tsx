@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import ClassHome from "./components/pages/ClassHome";
 import PrivateRoute from "./components/pages/PrivateRoute";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const App: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
@@ -44,6 +45,7 @@ const App: React.FC = () => {
   }
 
   return (
+    <ErrorBoundary>
     <Routes>
       <Route path="/home" element={<Home />} />
       <Route path="/" element={<Navigate to="/mainmenu" />} />
@@ -120,6 +122,7 @@ const App: React.FC = () => {
         }
       />
     </Routes>
+    </ErrorBoundary>
   );
 };
 

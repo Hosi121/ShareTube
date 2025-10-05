@@ -1,92 +1,74 @@
 openapi: 3.0.0
 info:
-  title: デプロ課題
+  title: ShareTube API
   version: 1.0.0
+servers:
+  - url: http://localhost:8081
 paths:
-  /api/register:
+  /register:
     post:
-      summary: "ユーザー登録"
+      summary: ユーザー登録
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/RegisterRequest'
       responses:
         "200":
-          description: "User registered successfully"
+          description: User registered successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/RegisterResponse'
         "400":
-          description: "Email already exists"
+          description: Invalid input
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
+        "409":
+          description: Duplicate email or username
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/login:
+  /login:
     post:
-      summary: "ユーザーログイン"
+      summary: ユーザーログイン
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         "200":
-          description: "Login successful"
+          description: Login successful
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                  message:
-                    type: string
+                $ref: '#/components/schemas/LoginResponse'
         "400":
-          description: "Invalid email or password"
+          description: Invalid input
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/logout:
+  /logout:
     post:
-      summary: "ユーザーログアウト"
-      parameters:
-        - in: header
-          name: Authorization
-          required: true
-          schema:
-            type: string
+      summary: ユーザーログアウト
       responses:
         "200":
-          description: "Logout successful"
+          description: Logout successful
           content:
             application/json:
               schema:
@@ -95,38 +77,32 @@ paths:
                   message:
                     type: string
 
-  /api/users/{userId}/settings:
+  /profile/{username}:
     get:
-      summary: "ユーザー設定の取得"
+      summary: プロフィール表示（ユーザー名）
       parameters:
         - in: path
-          name: userId
+          name: username
           required: true
           schema:
             type: string
       responses:
         "200":
-          description: "User settings"
+          description: User
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  settings:
-                    type: object
+                $ref: '#/components/schemas/User'
         "404":
-          description: "User not found"
+          description: User not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
-  /api/videos/upload:
+  /upload:
     post:
-      summary: "動画アップロード"
+      summary: 動画アップロード
       parameters:
         - in: header
           name: Authorization
@@ -144,16 +120,12 @@ paths:
                   type: string
                 description:
                   type: string
-                tags:
-                  type: array
-                  items:
-                    type: string
                 file:
                   type: string
                   format: binary
       responses:
         "200":
-          description: "Video uploaded successfully"
+          description: Video uploaded successfully
           content:
             application/json:
               schema:
@@ -161,78 +133,98 @@ paths:
                 properties:
                   message:
                     type: string
-                  videoId:
-                    type: string
+                  video:
+                    $ref: '#/components/schemas/Video'
         "400":
-          description: "File upload failed"
+          description: Upload error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/videos/{videoId}:
+  /videos/{id}:
     get:
-      summary: "動画再生"
+      summary: 動画詳細
       parameters:
         - in: path
-          name: videoId
+          name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         "200":
-          description: "Video details"
+          description: Video
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  title:
-                    type: string
-                  description:
-                    type: string
-                  tags:
-                    type: array
-                    items:
-                      type: string
-                  videoUrl:
-                    type: string
-                  likes:
-                    type: integer
-                  comments:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        user:
-                          type: string
-                        comment:
-                          type: string
-                        timestamp:
-                          type: string
-                          format: date-time
+                $ref: '#/components/schemas/Video'
         "404":
-          description: "Video not found"
+          description: Video not found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
 
-  /api/videos/{videoId}/comments:
-    post:
-      summary: "コメント投稿"
+  /videos/search:
+    get:
+      summary: 動画検索（単純LIKE）
       parameters:
-        - in: path
-          name: videoId
+        - in: query
+          name: q
           required: true
           schema:
             type: string
+        - in: query
+          name: top_k
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Videos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+
+  /comments/{video_id}:
+    get:
+      summary: コメント取得（動画ID）
+      parameters:
+        - in: path
+          name: video_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Comments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        "400":
+          description: Invalid video ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /comments:
+    post:
+      summary: コメント投稿
+      parameters:
         - in: header
           name: Authorization
           required: true
@@ -245,75 +237,39 @@ paths:
             schema:
               type: object
               properties:
+                video_id:
+                  type: integer
                 comment:
                   type: string
       responses:
         "200":
-          description: "Comment added successfully"
+          description: Created Comment
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Comment'
         "400":
-          description: "Failed to add comment"
+          description: Invalid input
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-    get:
-      summary: "コメント表示"
-      parameters:
-        - in: path
-          name: videoId
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: "List of comments"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  comments:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        user:
-                          type: string
-                        comment:
-                          type: string
-                        timestamp:
-                          type: string
-                          format: date-time
-        "400":
-          description: "Failed to fetch comments"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-
-  /api/videos/{videoId}/like:
+  /comments/{comment_id}/like:
     post:
-      summary: "いいね"
+      summary: コメントにいいね
       parameters:
         - in: path
-          name: videoId
+          name: comment_id
           required: true
           schema:
-            type: string
+            type: integer
         - in: header
           name: Authorization
           required: true
@@ -321,38 +277,7 @@ paths:
             type: string
       responses:
         "200":
-          description: "Video liked successfully"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  likes:
-                    type: integer
-        "400":
-          description: "Failed to like the video"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-
-  /api/videos/{videoId}/likes:
-    get:
-      summary: "評価表示"
-      parameters:
-        - in: path
-          name: videoId
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: "Number of likes"
+          description: Likes count
           content:
             application/json:
               schema:
@@ -361,65 +286,22 @@ paths:
                   likes:
                     type: integer
         "400":
-          description: "Failed to fetch likes"
+          description: Invalid comment ID
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/users/{userId}:
-    get:
-      summary: "プロフィール表示"
+  /class:
+    post:
+      summary: クラス作成
       parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: "User profile"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  username:
-                    type: string
-                  email:
-                    type: string
-                  videos:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        videoId:
-                          type: string
-                        title:
-                          type: string
-                        description:
-                          type: string
-        "404":
-          description: "User not found"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-
-    put:
-      summary: "プロフィール編集"
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: string
         - in: header
           name: Authorization
           required: true
@@ -430,71 +312,162 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                email:
-                  type: string
+              $ref: '#/components/schemas/Class'
       responses:
-        "200":
-          description: "Profile updated successfully"
+        "201":
+          description: Created class
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: '#/components/schemas/Class'
         "400":
-          description: "Failed to update profile"
+          description: Invalid input
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/videos/search:
+  /classes:
     get:
-      summary: "動画検索"
-      parameters:
-        - in: query
-          name: query
-          required: true
-          schema:
-            type: string
+      summary: クラス一覧
       responses:
         "200":
-          description: "Search results"
+          description: Classes
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  results:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        videoId:
-                          type: string
-                        title:
-                          type: string
-                        description:
-                          type: string
-                        tags:
-                          type: array
-                          items:
-                            type: string
-        "400":
-          description: "Failed to search videos"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/Class'
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          nullable: true
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        video_url:
+          type: string
+        likes:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        video_id:
+          type: integer
+        user_id:
+          type: integer
+        comment:
+          type: string
+        likes:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+    Class:
+      type: object
+      properties:
+        id:
+          type: integer
+        className:
+          type: string
+        classLocation:
+          type: string
+        teacherName:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+    RegisterResponse:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        username:
+          type: string
+        message:
+          type: string
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        username:
+          type: string
+        message:
+          type: string
 

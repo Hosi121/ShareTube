@@ -1,5 +1,6 @@
 import api from "./api";
 import { Video, UploadVideoInput , VideoDetails} from "../types/video";
+import { ApiResponse } from "../types/api";
 
 export const fetchVideoDetails = async (videoId: string): Promise<VideoDetails> => {
   try {
@@ -34,6 +35,16 @@ export const fetchVideos = async (params?: {
     return response.data;
   } catch (error) {
     console.error("Error fetching videos:", error);
+    throw error;
+  }
+};
+
+export const searchVideos = async (query: string, topK = 10): Promise<Video[]> => {
+  try {
+    const response = await api.get<Video[]>(`/videos/search`, { params: { q: query, top_k: topK } });
+    return response.data;
+  } catch (error) {
+    console.error("Error searching videos:", error);
     throw error;
   }
 };
