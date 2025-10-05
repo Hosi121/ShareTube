@@ -11,6 +11,7 @@ import (
 
 type VideoService interface {
     GetByID(ctx context.Context, id uint) (*models.Video, error)
+    Search(ctx context.Context, query string, topK int) ([]models.Video, error)
 }
 
 type videoService struct { repo repositories.VideoRepository }
@@ -28,3 +29,6 @@ func (s *videoService) GetByID(ctx context.Context, id uint) (*models.Video, err
     return v, nil
 }
 
+func (s *videoService) Search(ctx context.Context, query string, topK int) ([]models.Video, error) {
+    return s.repo.Search(ctx, query, topK)
+}
