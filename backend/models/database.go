@@ -26,7 +26,8 @@ func ConnectDatabase() {
 		os.Getenv("DB_NAME"),
 	)
 
-	slog.Info("Connecting to database", "dsn", dsn) // デバッグ用のログ出力
+    // Avoid logging full DSN to prevent credential leakage
+    slog.Info("Connecting to database", "host", os.Getenv("DB_HOST"), "db", os.Getenv("DB_NAME"))
 
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
