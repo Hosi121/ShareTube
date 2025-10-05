@@ -6,6 +6,7 @@ import (
     "context"
 
     "backend/dto"
+    "backend/pkg/apperrors"
     "backend/services"
     "github.com/gin-gonic/gin"
 )
@@ -31,15 +32,12 @@ func (ac *AuthController) Register(c *gin.Context) {
     if err != nil {
         switch err {
         case services.ErrDuplicateEmail:
-            c.JSON(http.StatusConflict, gin.H{"error": "Email already registered"})
-            return
+            c.Error(apperrors.ErrDuplicateEmail); return
         case services.ErrDuplicateUser:
-            c.JSON(http.StatusConflict, gin.H{"error": "Username already exists"})
-            return
+            c.Error(apperrors.ErrDuplicateUser); return
         default:
             slog.Error("Register failed", "error", err)
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
-            return
+            c.Error(&apperrors.AppError{Code: "CREATE_USER_FAILED", Message: "Failed to create user", StatusCode: http.StatusInternalServerError}); return
         }
     }
 
@@ -59,13 +57,13 @@ func (ac *AuthController) Login(c *gin.Context) {
     resp, err := ac.service.Login(context.Background(), input)
     if err != nil {
         switch err {
-        case services.ErrUserNotFound, services.ErrInvalidPassword:
-            c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-            return
+        case services.ErrUserNotFound:
+            c.Error(apperrors.ErrUserNotFound); return
+        case services.ErrInvalidPassword:
+            c.Error(apperrors.ErrInvalidPassword); return
         default:
             slog.Error("Login failed", "error", err)
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
-            return
+            c.Error(&apperrors.AppError{Code: "TOKEN_GEN_FAILED", Message: "Failed to generate token", StatusCode: http.StatusInternalServerError}); return
         }
     }
 

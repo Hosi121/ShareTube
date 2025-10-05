@@ -1,37 +1,29 @@
 package controllers
 
 import (
+    "context"
     "net/http"
     "strconv"
 
+    "backend/services"
     "github.com/gin-gonic/gin"
-    "backend/models"
 )
 
-func GetProfile(c *gin.Context) {
-    userID, err := strconv.ParseUint(c.Param("id"), 10, 32)
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
-        return
-    }
+type ProfileController struct { svc services.ProfileService }
 
-    user, err := models.GetUserByID(uint(userID))
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+func NewProfileController(s services.ProfileService) *ProfileController { return &ProfileController{svc: s} }
 
+func (pc *ProfileController) GetProfile(c *gin.Context) {
+    id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+    if err != nil { c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"}); return }
+    user, err := pc.svc.GetByID(context.Background(), uint(id))
+    if err != nil { c.Error(err); return }
     c.JSON(http.StatusOK, user)
 }
 
-func GetProfileByUsername(c *gin.Context) {
+func (pc *ProfileController) GetProfileByUsername(c *gin.Context) {
     username := c.Param("username")
-
-    user, err := models.GetUserByUsername(username)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-
+    user, err := pc.svc.GetByUsername(context.Background(), username)
+    if err != nil { c.Error(err); return }
     c.JSON(http.StatusOK, user)
 }

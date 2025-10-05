@@ -6,6 +6,6 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func VideoUploadRoutes(router *gin.Engine) {
-    router.POST("/upload", middleware.AuthMiddleware(), controllers.UploadVideo)
+func VideoUploadRoutes(router *gin.Engine, uc *controllers.UploadController) {
+    router.POST("/upload", middleware.AuthMiddleware(), uc.UploadVideo)
 }
