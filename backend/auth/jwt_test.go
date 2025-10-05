@@ -1,9 +1,11 @@
 package auth
 
 import (
+    "os"
     "testing"
     "time"
-    "github.com/dgrijalva/jwt-go"
+
+    jwt "github.com/golang-jwt/jwt/v5"
 )
 
 func TestGenerateJWT(t *testing.T) {
@@ -30,8 +32,14 @@ func TestGenerateJWT(t *testing.T) {
         t.Fatalf("Expected userID %d but got %d", userID, claims.UserID)
     }
 
-    expectedExpirationTime := time.Now().Add(24 * time.Hour).Unix()
-    if claims.ExpiresAt < time.Now().Unix() || claims.ExpiresAt > expectedExpirationTime {
+    // Validate expiration window (allow slight clock skew)
+    if claims.ExpiresAt == nil {
+        t.Fatalf("Token expiration is nil")
+    }
+    exp := claims.ExpiresAt.Time
+    now := time.Now().Add(-2 * time.Second)
+    max := time.Now().Add(24 * time.Hour)
+    if exp.Before(now) || exp.After(max) {
         t.Fatalf("Token expiration time is not valid")
     }
 }
@@ -52,8 +60,13 @@ func TestVerifyJWT(t *testing.T) {
         t.Fatalf("Expected userID %d but got %d", userID, claims.UserID)
     }
 
-    expectedExpirationTime := time.Now().Add(24 * time.Hour).Unix()
-    if claims.ExpiresAt < time.Now().Unix() || claims.ExpiresAt > expectedExpirationTime {
+    if claims.ExpiresAt == nil {
+        t.Fatalf("Token expiration is nil")
+    }
+    exp := claims.ExpiresAt.Time
+    now := time.Now().Add(-2 * time.Second)
+    max := time.Now().Add(24 * time.Hour)
+    if exp.Before(now) || exp.After(max) {
         t.Fatalf("Token expiration time is not valid")
     }
 }
@@ -70,8 +83,8 @@ func TestVerifyInvalidJWT(t *testing.T) {
     userID := uint(1)
     claims := &Claims{
         UserID: userID,
-        StandardClaims: jwt.StandardClaims{
-            ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
+        RegisteredClaims: jwt.RegisteredClaims{
+            ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
         },
     }
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -85,15 +98,19 @@ func TestVerifyInvalidJWT(t *testing.T) {
     // 期限切れのトークン
     expiredClaims := &Claims{
         UserID: userID,
-        StandardClaims: jwt.StandardClaims{
-            ExpiresAt: time.Now().Add(-1 * time.Hour).Unix(),
+        RegisteredClaims: jwt.RegisteredClaims{
+            ExpiresAt: jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
         },
     }
     expiredToken := jwt.NewWithClaims(jwt.SigningMethodHS256, expiredClaims)
-    expiredTokenString, _ := expiredToken.SignedString(jwtKey)
+    // sign with the same secret resolved in runtime
+    key := os.Getenv("JWT_SECRET")
+    if key == "" {
+        key = "your_jwt_secret"
+    }
+    expiredTokenString, _ := expiredToken.SignedString([]byte(key))
     _, err = VerifyJWT(expiredTokenString)
     if err == nil {
         t.Fatalf("Expected error but got none")
     }
 }
-
