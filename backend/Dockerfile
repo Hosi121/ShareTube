@@ -24,8 +24,8 @@ WORKDIR /app
 # 7. builder stageで生成したGoのバイナリファイルをApline Linuxのイメージにコピー
 COPY --from=builder /app/main /app/main
 
-# 8. 必要なポートを公開
-EXPOSE 8080
+# 8. 必要なポートを公開 (アプリはデフォルトで8081)
+EXPOSE 8081
 
 # 9. アプリケーションを起動
 CMD ["./main"]
