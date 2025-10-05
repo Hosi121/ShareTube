@@ -1,13 +1,16 @@
 package main
 
 import (
-	"backend/config"
-	"backend/middleware"
-	"backend/models"
-	"backend/routes"
-	"log"
+    "backend/config"
+    "backend/controllers"
+    "backend/middleware"
+    "backend/models"
+    "backend/repositories"
+    "backend/routes"
+    "backend/services"
+    "log"
 
-	"github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -23,8 +26,13 @@ func main() {
 	models.ConnectDatabase()
 	models.SetDatabase(models.DB)
 
-	// ルートを設定
-	routes.AuthRoutes(r)
+    // Repository and Service wiring
+    userRepo := repositories.NewUserRepository(models.DB)
+    authService := services.NewAuthService(userRepo)
+    authController := controllers.NewAuthController(authService)
+
+    // ルートを設定
+    routes.AuthRoutes(r, authController)
 	routes.ProfileRoutes(r)
 	routes.CommentRoutes(r)
 	routes.VideoUploadRoutes(r)
